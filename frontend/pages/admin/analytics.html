@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Analytics - LocalReach</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f6fa;
+
+            color: #111827;
+        }
+
+
+        /* =========================================================
+           ADMIN LAYOUT
+        ========================================================= */
+
+        .sidebar {
+
+            width: 265px;
+
+            height: 100vh;
+
+            position: fixed;
+
+            left: 0;
+
+            top: 0;
+
+            background: #111827;
+
+            color: white;
+
+            padding: 28px 16px;
+
+            overflow-y: auto;
+        }
+
+
+        /* =========================================================
+           LOGO
+        ========================================================= */
+
+        .logo {
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+            margin-left: 12px;
+
+            margin-bottom: 48px;
+
+            color: white;
+        }
+
+
+        /* =========================================================
+           NAVIGATION
+        ========================================================= */
+
+        .nav {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+
+        .nav-link {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            width: 100%;
+
+            padding: 14px 14px;
+
+            border-radius: 8px;
+
+            color: #d1d5db;
+
+            text-decoration: none;
+
+            font-size: 18px;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+
+        .nav-link:hover {
+
+            background: #1f2937;
+
+            color: white;
+        }
+
+
+        .nav-link.active {
+
+            background: #2563eb;
+
+            color: white;
+
+            font-weight: 500;
+        }
+
+
+        .nav-icon {
+
+            width: 22px;
+
+            text-align: center;
+
+            font-size: 18px;
+        }
+
+
+        /* =========================================================
+           MAIN CONTENT
+        ========================================================= */
+
+        .main {
+
+            margin-left: 265px;
+
+            padding: 38px 42px;
+
+            min-height: 100vh;
+        }
+
+
+        .page-header {
+
+            margin-bottom: 28px;
+        }
+
+
+        .page-header h1 {
+
+            margin: 0;
+
+            font-size: 38px;
+
+            line-height: 1.2;
+
+            color: #111827;
+        }
+
+
+        .page-header p {
+
+            margin-top: 10px;
+
+            margin-bottom: 0;
+
+            font-size: 20px;
+
+            color: #64748b;
+        }
+
+
+        /* =========================================================
+           ERROR / LOADING
+        ========================================================= */
+
+        .message {
+
+            display: none;
+
+            padding: 15px 18px;
+
+            margin-bottom: 25px;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+        }
+
+
+        .message.error {
+
+            display: block;
+
+            background: #fee2e2;
+
+            color: #991b1b;
+        }
+
+
+        .loading {
+
+            color: #64748b;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================================================
+           KPI CARDS
+        ========================================================= */
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .stat-card {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.05);
+        }
+
+
+        .stat-card h3 {
+
+            margin: 0 0 14px;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            color: #64748b;
+        }
+
+
+        .stat-value {
+
+            font-size: 32px;
+
+            font-weight: 700;
+
+            color: #111827;
+        }
+
+
+        /* =========================================================
+           CONTENT GRID
+        ========================================================= */
+
+        .content-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 25px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .card {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.05);
+        }
+
+
+        .card h2 {
+
+            margin: 0 0 22px;
+
+            font-size: 22px;
+
+            color: #111827;
+        }
+
+
+        .card-subtitle {
+
+            margin-top: -12px;
+
+            margin-bottom: 20px;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           STATUS ROWS
+        ========================================================= */
+
+        .status-row {
+
+            margin-bottom: 20px;
+        }
+
+
+        .status-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 8px;
+        }
+
+
+        .status-name {
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            color: #374151;
+
+            text-transform: capitalize;
+        }
+
+
+        .status-number {
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            color: #111827;
+        }
+
+
+        .progress {
+
+            width: 100%;
+
+            height: 10px;
+
+            background: #e5e7eb;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        .progress-bar {
+
+            height: 100%;
+
+            background: #2563eb;
+
+            border-radius: 20px;
+
+            width: 0%;
+
+            transition:
+                width 0.5s ease;
+        }
+
+
+        .progress-bar.pending {
+
+            background: #f59e0b;
+        }
+
+
+        .progress-bar.active {
+
+            background: #16a34a;
+        }
+
+
+        .progress-bar.paused {
+
+            background: #64748b;
+        }
+
+
+        .progress-bar.completed {
+
+            background: #7c3aed;
+        }
+
+
+        .progress-bar.rejected {
+
+            background: #dc2626;
+        }
+
+
+        /* =========================================================
+           PLAYBACK CARDS
+        ========================================================= */
+
+        .playback-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 15px;
+        }
+
+
+        .playback-item {
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 10px;
+
+            padding: 18px;
+        }
+
+
+        .playback-item h3 {
+
+            margin: 0 0 8px;
+
+            font-size: 14px;
+
+            color: #64748b;
+
+            font-weight: 600;
+        }
+
+
+        .playback-item .value {
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            color: #111827;
+        }
+
+
+        /* =========================================================
+           SUCCESS RATE
+        ========================================================= */
+
+        .success-container {
+
+            margin-top: 25px;
+        }
+
+
+        .success-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 10px;
+        }
+
+
+        .success-header span:first-child {
+
+            font-weight: 600;
+
+            color: #374151;
+        }
+
+
+        #successRate {
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            color: #16a34a;
+        }
+
+
+        .success-progress {
+
+            height: 14px;
+
+            width: 100%;
+
+            background: #e5e7eb;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        #successBar {
+
+            height: 100%;
+
+            width: 0%;
+
+            background: #16a34a;
+
+            border-radius: 20px;
+
+            transition:
+                width 0.6s ease;
+        }
+
+
+        /* =========================================================
+           REFRESH BUTTON
+        ========================================================= */
+
+        .header-actions {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            margin-bottom: 20px;
+        }
+
+
+        .refresh-button {
+
+            border: none;
+
+            background: #2563eb;
+
+            color: white;
+
+            padding: 11px 20px;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+
+        .refresh-button:hover {
+
+            background: #1d4ed8;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1200px) {
+
+            .stats-grid {
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+        }
+
+
+        @media (max-width: 900px) {
+
+            .content-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+
+                width: 210px;
+            }
+
+
+            .main {
+
+                margin-left: 210px;
+
+                padding: 25px 20px;
+            }
+
+
+            .stats-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .playback-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .page-header h1 {
+
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+
+    <!-- =========================================
+     ADMIN NAVIGATION
+========================================= -->
+
+<aside class="lr-sidebar">
+
+    <div class="lr-logo">
+        LocalReach
+    </div>
+
+    <a href="dashboard.html" class="lr-nav-link">
+        🏠 Dashboard
+    </a>
+
+    <a href="payouts.html" class="lr-nav-link">
+        💰 Payouts
+    </a>
+
+    <a href="users.html" class="lr-nav-link">
+        👥 Users
+    </a>
+
+    <a href="screens.html" class="lr-nav-link">
+        🖥️ Screens
+    </a>
+
+    <a href="campaigns.html" class="lr-nav-link">
+        📋 Campaigns
+    </a>
+
+    <a href="advertisements.html" class="lr-nav-link">
+        📢 Advertisements
+    </a>
+
+    <a href="analytics.html" class="lr-nav-link">
+        📊 Advertisement Analytics
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH ADMIN NAVIGATION
+    ========================================= */
+
+    .lr-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-nav-link.lr-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+       The correct option stays highlighted
+       on every admin page.
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(".lr-nav-link")
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+    <!-- =========================================================
+         MAIN CONTENT
+    ========================================================== -->
+
+    <main class="main">
+
+
+        <div class="page-header">
+
+            <h1>
+                Analytics
+            </h1>
+
+            <p>
+                View LocalReach platform performance and activity.
+            </p>
+
+        </div>
+
+
+
+        <div class="header-actions">
+
+            <button
+                class="refresh-button"
+                onclick="loadAnalytics()"
+            >
+                🔄 Refresh
+            </button>
+
+        </div>
+
+
+
+        <div
+            id="errorMessage"
+            class="message"
+        ></div>
+
+
+
+        <!-- =====================================================
+             TOP STATISTICS
+        ====================================================== -->
+
+        <section class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Campaigns
+                </h3>
+
+                <div
+                    id="totalCampaigns"
+                    class="stat-value"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Active Campaigns
+                </h3>
+
+                <div
+                    id="activeCampaigns"
+                    class="stat-value"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Plays
+                </h3>
+
+                <div
+                    id="totalPlays"
+                    class="stat-value"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Verified Plays
+                </h3>
+
+                <div
+                    id="verifiedPlays"
+                    class="stat-value"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================================
+             CAMPAIGN + PLAYBACK
+        ====================================================== -->
+
+        <section class="content-grid">
+
+
+            <!-- CAMPAIGN ANALYTICS -->
+
+            <div class="card">
+
+                <h2>
+                    Campaign Analytics
+                </h2>
+
+                <p class="card-subtitle">
+                    Campaigns grouped by their current status.
+                </p>
+
+
+                <!-- DRAFT -->
+
+                <div class="status-row">
+
+                    <div class="status-header">
+
+                        <span class="status-name">
+                            Draft
+                        </span>
+
+                        <span
+                            id="draftCount"
+                            class="status-number"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div
+                            id="draftBar"
+                            class="progress-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PENDING -->
+
+                <div class="status-row">
+
+                    <div class="status-header">
+
+                        <span class="status-name">
+                            Pending
+                        </span>
+
+                        <span
+                            id="pendingCount"
+                            class="status-number"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div
+                            id="pendingBar"
+                            class="progress-bar pending"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACTIVE -->
+
+                <div class="status-row">
+
+                    <div class="status-header">
+
+                        <span class="status-name">
+                            Active
+                        </span>
+
+                        <span
+                            id="activeCount"
+                            class="status-number"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div
+                            id="activeBar"
+                            class="progress-bar active"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PAUSED -->
+
+                <div class="status-row">
+
+                    <div class="status-header">
+
+                        <span class="status-name">
+                            Paused
+                        </span>
+
+                        <span
+                            id="pausedCount"
+                            class="status-number"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div
+                            id="pausedBar"
+                            class="progress-bar paused"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- COMPLETED -->
+
+                <div class="status-row">
+
+                    <div class="status-header">
+
+                        <span class="status-name">
+                            Completed
+                        </span>
+
+                        <span
+                            id="completedCount"
+                            class="status-number"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div
+                            id="completedBar"
+                            class="progress-bar completed"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REJECTED -->
+
+                <div class="status-row">
+
+                    <div class="status-header">
+
+                        <span class="status-name">
+                            Rejected
+                        </span>
+
+                        <span
+                            id="rejectedCount"
+                            class="status-number"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress">
+
+                        <div
+                            id="rejectedBar"
+                            class="progress-bar rejected"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- PLAYBACK ANALYTICS -->
+
+            <div class="card">
+
+                <h2>
+                    Playback Analytics
+                </h2>
+
+                <p class="card-subtitle">
+                    Advertisement playback performance.
+                </p>
+
+
+                <div class="playback-grid">
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Total Plays
+                        </h3>
+
+                        <div
+                            id="playbackTotal"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Verified Plays
+                        </h3>
+
+                        <div
+                            id="playbackVerified"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Failed Plays
+                        </h3>
+
+                        <div
+                            id="playbackFailed"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Verified Play Time
+                        </h3>
+
+                        <div
+                            id="verifiedTime"
+                            class="value"
+                        >
+                            0m
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- SUCCESS RATE -->
+
+                <div class="success-container">
+
+                    <div class="success-header">
+
+                        <span>
+                            Playback Success Rate
+                        </span>
+
+                        <span id="successRate">
+                            0%
+                        </span>
+
+                    </div>
+
+
+                    <div class="success-progress">
+
+                        <div
+                            id="successBar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ADDITIONAL ANALYTICS
+        ====================================================== -->
+
+        <section class="content-grid">
+
+
+            <div class="card">
+
+                <h2>
+                    Campaign Summary
+                </h2>
+
+                <div class="playback-grid">
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Draft Campaigns
+                        </h3>
+
+                        <div
+                            id="summaryDraft"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Pending Campaigns
+                        </h3>
+
+                        <div
+                            id="summaryPending"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Completed Campaigns
+                        </h3>
+
+                        <div
+                            id="summaryCompleted"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Rejected Campaigns
+                        </h3>
+
+                        <div
+                            id="summaryRejected"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h2>
+                    Playback Summary
+                </h2>
+
+                <div class="playback-grid">
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Verified Seconds
+                        </h3>
+
+                        <div
+                            id="verifiedSeconds"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Verified Minutes
+                        </h3>
+
+                        <div
+                            id="verifiedMinutes"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Total Plays
+                        </h3>
+
+                        <div
+                            id="summaryTotalPlays"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="playback-item">
+
+                        <h3>
+                            Failed Plays
+                        </h3>
+
+                        <div
+                            id="summaryFailedPlays"
+                            class="value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script>
+
+
+        /* =========================================================
+           AUTHENTICATION
+        ========================================================= */
+
+        const token =
+            localStorage.getItem("token");
+
+
+        if (!token) {
+
+            window.location.href =
+                "../login.html";
+
+        }
+
+
+
+        /* =========================================================
+           LOGOUT
+        ========================================================= */
+
+        function logout() {
+
+            localStorage.removeItem("token");
+
+            localStorage.removeItem("user");
+
+        }
+
+
+
+        /* =========================================================
+           ERROR MESSAGE
+        ========================================================= */
+
+        function showError(message) {
+
+            const errorBox =
+                document.getElementById(
+                    "errorMessage"
+                );
+
+
+            errorBox.textContent =
+                message;
+
+
+            errorBox.className =
+                "message error";
+
+        }
+
+
+
+        function clearError() {
+
+            const errorBox =
+                document.getElementById(
+                    "errorMessage"
+                );
+
+
+            errorBox.textContent = "";
+
+            errorBox.className =
+                "message";
+
+        }
+
+
+
+        /* =========================================================
+           FORMAT NUMBER
+        ========================================================= */
+
+        function formatNumber(value) {
+
+            return Number(
+                value || 0
+            ).toLocaleString("en-IN");
+
+        }
+
+
+
+        /* =========================================================
+           SET CAMPAIGN STATUS
+        ========================================================= */
+
+        function setCampaignStatus(
+            name,
+            value,
+            total
+        ) {
+
+            const countElement =
+                document.getElementById(
+                    name + "Count"
+                );
+
+
+            const barElement =
+                document.getElementById(
+                    name + "Bar"
+                );
+
+
+            if (countElement) {
+
+                countElement.textContent =
+                    formatNumber(value);
+
+            }
+
+
+            if (barElement) {
+
+                let percentage = 0;
+
+
+                if (total > 0) {
+
+                    percentage =
+                        (Number(value) /
+                            Number(total)) *
+                        100;
+
+                }
+
+
+                barElement.style.width =
+                    Math.min(
+                        percentage,
+                        100
+                    ) + "%";
+
+            }
+
+        }
+
+
+
+        /* =========================================================
+           LOAD ANALYTICS
+        ========================================================== */
+
+        async function loadAnalytics() {
+
+            clearError();
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/admin/analytics",
+                        {
+                            method: "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    "Bearer " +
+                                    token
+
+                            }
+                        }
+                    );
+
+
+
+                const data =
+                    await response.json();
+
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load admin analytics"
+                    );
+
+                }
+
+
+
+                /* =================================================
+                   CAMPAIGN DATA
+                ================================================== */
+
+                const campaigns =
+                    data.campaigns || {};
+
+
+
+                const draft =
+                    Number(
+                        campaigns.draft || 0
+                    );
+
+
+                const pending =
+                    Number(
+                        campaigns.pending || 0
+                    );
+
+
+                const active =
+                    Number(
+                        campaigns.active || 0
+                    );
+
+
+                const paused =
+                    Number(
+                        campaigns.paused || 0
+                    );
+
+
+                const completed =
+                    Number(
+                        campaigns.completed || 0
+                    );
+
+
+                const rejected =
+                    Number(
+                        campaigns.rejected || 0
+                    );
+
+
+
+                const totalCampaigns =
+                    draft +
+                    pending +
+                    active +
+                    paused +
+                    completed +
+                    rejected;
+
+
+
+                /* =================================================
+                   TOP CAMPAIGN CARDS
+                ================================================== */
+
+                document.getElementById(
+                    "totalCampaigns"
+                ).textContent =
+                    formatNumber(
+                        totalCampaigns
+                    );
+
+
+                document.getElementById(
+                    "activeCampaigns"
+                ).textContent =
+                    formatNumber(
+                        active
+                    );
+
+
+
+                /* =================================================
+                   CAMPAIGN STATUS BARS
+                ================================================== */
+
+                setCampaignStatus(
+                    "draft",
+                    draft,
+                    totalCampaigns
+                );
+
+
+                setCampaignStatus(
+                    "pending",
+                    pending,
+                    totalCampaigns
+                );
+
+
+                setCampaignStatus(
+                    "active",
+                    active,
+                    totalCampaigns
+                );
+
+
+                setCampaignStatus(
+                    "paused",
+                    paused,
+                    totalCampaigns
+                );
+
+
+                setCampaignStatus(
+                    "completed",
+                    completed,
+                    totalCampaigns
+                );
+
+
+                setCampaignStatus(
+                    "rejected",
+                    rejected,
+                    totalCampaigns
+                );
+
+
+
+                /* =================================================
+                   CAMPAIGN SUMMARY
+                ================================================== */
+
+                document.getElementById(
+                    "summaryDraft"
+                ).textContent =
+                    formatNumber(draft);
+
+
+                document.getElementById(
+                    "summaryPending"
+                ).textContent =
+                    formatNumber(pending);
+
+
+                document.getElementById(
+                    "summaryCompleted"
+                ).textContent =
+                    formatNumber(completed);
+
+
+                document.getElementById(
+                    "summaryRejected"
+                ).textContent =
+                    formatNumber(rejected);
+
+
+
+                /* =================================================
+                   PLAYBACK DATA
+                ================================================== */
+
+                const playback =
+                    data.playback || {};
+
+
+
+                const totalPlays =
+                    Number(
+                        playback.total_plays || 0
+                    );
+
+
+                const verifiedPlays =
+                    Number(
+                        playback.verified_plays || 0
+                    );
+
+
+                const failedPlays =
+                    Number(
+                        playback.failed_plays || 0
+                    );
+
+
+                const verifiedSeconds =
+                    Number(
+                        playback.verified_seconds || 0
+                    );
+
+
+
+                /* =================================================
+                   CALCULATE PLAYBACK
+                ================================================== */
+
+                let successRate = 0;
+
+
+                if (totalPlays > 0) {
+
+                    successRate =
+                        (
+                            verifiedPlays /
+                            totalPlays
+                        ) *
+                        100;
+
+                }
+
+
+                successRate =
+                    Number(
+                        successRate.toFixed(1)
+                    );
+
+
+
+                const verifiedMinutes =
+                    Math.floor(
+                        verifiedSeconds / 60
+                    );
+
+
+                const verifiedHours =
+                    Math.floor(
+                        verifiedMinutes / 60
+                    );
+
+
+                const remainingMinutes =
+                    verifiedMinutes % 60;
+
+
+
+                let verifiedTime = "0m";
+
+
+                if (verifiedHours > 0) {
+
+                    verifiedTime =
+                        verifiedHours +
+                        "h " +
+                        remainingMinutes +
+                        "m";
+
+                } else {
+
+                    verifiedTime =
+                        verifiedMinutes +
+                        "m";
+
+                }
+
+
+
+                /* =================================================
+                   TOP PLAYBACK CARDS
+                ================================================== */
+
+                document.getElementById(
+                    "totalPlays"
+                ).textContent =
+                    formatNumber(
+                        totalPlays
+                    );
+
+
+                document.getElementById(
+                    "verifiedPlays"
+                ).textContent =
+                    formatNumber(
+                        verifiedPlays
+                    );
+
+
+
+                /* =================================================
+                   PLAYBACK DETAILS
+                ================================================== */
+
+                document.getElementById(
+                    "playbackTotal"
+                ).textContent =
+                    formatNumber(
+                        totalPlays
+                    );
+
+
+                document.getElementById(
+                    "playbackVerified"
+                ).textContent =
+                    formatNumber(
+                        verifiedPlays
+                    );
+
+
+                document.getElementById(
+                    "playbackFailed"
+                ).textContent =
+                    formatNumber(
+                        failedPlays
+                    );
+
+
+                document.getElementById(
+                    "verifiedTime"
+                ).textContent =
+                    verifiedTime;
+
+
+
+                /* =================================================
+                   SUCCESS RATE
+                ================================================== */
+
+                document.getElementById(
+                    "successRate"
+                ).textContent =
+                    successRate + "%";
+
+
+                document.getElementById(
+                    "successBar"
+                ).style.width =
+                    Math.min(
+                        successRate,
+                        100
+                    ) + "%";
+
+
+
+                /* =================================================
+                   PLAYBACK SUMMARY
+                ================================================== */
+
+                document.getElementById(
+                    "verifiedSeconds"
+                ).textContent =
+                    formatNumber(
+                        verifiedSeconds
+                    );
+
+
+                document.getElementById(
+                    "verifiedMinutes"
+                ).textContent =
+                    formatNumber(
+                        verifiedMinutes
+                    );
+
+
+                document.getElementById(
+                    "summaryTotalPlays"
+                ).textContent =
+                    formatNumber(
+                        totalPlays
+                    );
+
+
+                document.getElementById(
+                    "summaryFailedPlays"
+                ).textContent =
+                    formatNumber(
+                        failedPlays
+                    );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Admin analytics error:",
+                    error
+                );
+
+
+                showError(
+                    error.message ||
+                    "Unable to load analytics."
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================================================
+           LOAD WHEN PAGE OPENS
+        ========================================================== */
+
+        loadAnalytics();
+
+
+    </script>
+
+
+</body>
+
+</html>

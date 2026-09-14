@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Screens - LocalReach</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+
+        /* ============================================================
+           SIDEBAR
+        ============================================================ */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: #111827;
+            padding: 30px 18px;
+            z-index: 1000;
+        }
+
+
+        .sidebar .logo {
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            margin: 0 0 45px 12px;
+        }
+
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            color: #f3f4f6;
+            text-decoration: none;
+
+            padding: 15px 18px;
+            margin-bottom: 8px;
+
+            border-radius: 9px;
+
+            font-size: 18px;
+
+            transition: 0.2s;
+        }
+
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #374151;
+            color: white;
+        }
+
+
+        /* ============================================================
+           NOTIFICATION BADGE
+        ============================================================ */
+
+        .notification-badge {
+            min-width: 20px;
+            height: 20px;
+
+            padding: 0 6px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #ef4444;
+            color: white;
+
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+
+        /* ============================================================
+           MAIN
+        ============================================================ */
+
+        .main {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+
+            min-height: 100vh;
+
+            padding: 45px;
+        }
+
+
+        /* ============================================================
+           HEADER
+        ============================================================ */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+
+        .header p {
+            color: #6b7280;
+            margin-top: 6px;
+        }
+
+
+        /* ============================================================
+           REGISTER BUTTON
+        ============================================================ */
+
+        .register-btn {
+            border: none;
+
+            background: #2563eb;
+            color: white;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .register-btn:hover {
+            background: #1d4ed8;
+        }
+
+
+        /* ============================================================
+           REGISTER FORM
+        ============================================================ */
+
+        .form-card {
+            display: none;
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 30px;
+
+            margin-bottom: 30px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.06);
+        }
+
+
+        .form-card.show {
+            display: block;
+        }
+
+
+        .form-card h2 {
+            margin-bottom: 8px;
+        }
+
+
+        .form-description {
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(250px, 1fr));
+
+            gap: 18px;
+        }
+
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            background: white;
+        }
+
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 2px
+                rgba(37, 99, 235, 0.1);
+        }
+
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+
+            margin-top: 25px;
+        }
+
+
+        .submit-btn {
+            border: none;
+
+            background: #16a34a;
+            color: white;
+
+            padding: 11px 18px;
+
+            border-radius: 7px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .submit-btn:hover {
+            background: #15803d;
+        }
+
+
+        .cancel-btn {
+            border: 1px solid #d1d5db;
+
+            background: white;
+            color: #374151;
+
+            padding: 11px 18px;
+
+            border-radius: 7px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .cancel-btn:hover {
+            background: #f9fafb;
+        }
+
+
+        .form-message {
+            margin-top: 18px;
+
+            padding: 12px;
+
+            border-radius: 7px;
+
+            display: none;
+
+            font-size: 14px;
+        }
+
+
+        .form-message.success {
+            display: block;
+
+            background: #dcfce7;
+            color: #166534;
+        }
+
+
+        .form-message.error {
+            display: block;
+
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+
+        /* ============================================================
+           SCREEN GRID
+        ============================================================ */
+
+        .screens-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(300px, 1fr));
+
+            gap: 20px;
+        }
+
+
+        .screen-card {
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.06);
+        }
+
+
+        .screen-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            margin-bottom: 20px;
+        }
+
+
+        .screen-header h2 {
+            font-size: 20px;
+        }
+
+
+        .screen-id {
+            color: #6b7280;
+
+            font-size: 13px;
+
+            margin-top: 5px;
+        }
+
+
+        /* ============================================================
+           STATUS
+        ============================================================ */
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .status.online {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+
+        .status.offline {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+
+        .status.suspended {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+
+        /* ============================================================
+           DETAILS
+        ============================================================ */
+
+        .details {
+            border-top: 1px solid #e5e7eb;
+
+            padding-top: 15px;
+        }
+
+
+        .detail-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 9px 0;
+
+            font-size: 14px;
+        }
+
+
+        .detail-label {
+            color: #6b7280;
+        }
+
+
+        .detail-value {
+            font-weight: 600;
+
+            text-align: right;
+        }
+
+
+        /* ============================================================
+           EMPTY / ERROR
+        ============================================================ */
+
+        .empty {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            color: #6b7280;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.06);
+
+            grid-column: 1 / -1;
+        }
+
+
+        .error {
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            grid-column: 1 / -1;
+        }
+
+
+        /* ============================================================
+           MOBILE
+        ============================================================ */
+
+        @media (max-width: 900px) {
+
+            .screens-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+
+                width: calc(100% - 220px);
+
+                padding: 25px;
+            }
+
+            .header {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+     SCREEN OWNER NAVIGATION
+========================================= -->
+
+<aside class="lr-owner-sidebar">
+
+    <div class="lr-owner-logo">
+        LocalReach
+    </div>
+
+    <a
+        href="dashboard.html"
+        class="lr-owner-nav-link"
+    >
+        🏠 Dashboard
+    </a>
+
+    <a
+        href="screens.html"
+        class="lr-owner-nav-link"
+    >
+        🖥️ My Screens
+    </a>
+
+    <a
+        href="campaigns.html"
+        class="lr-owner-nav-link"
+    >
+        📋 Campaigns
+    </a>
+
+    <a
+        href="earnings.html"
+        class="lr-owner-nav-link"
+    >
+        💰 Earnings
+    </a>
+
+    <a
+        href="analytics.html"
+        class="lr-owner-nav-link"
+    >
+        📊 Analytics
+    </a>
+
+    <a
+        href="payouts.html"
+        class="lr-owner-nav-link"
+    >
+        💳 Payouts
+    </a>
+
+    <a
+        href="../notifications.html"
+        class="lr-owner-nav-link"
+    >
+        🔔 Notifications
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-owner-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH OWNER NAVIGATION
+    ========================================= */
+
+    .lr-owner-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-owner-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-owner-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-owner-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-owner-nav-link.lr-owner-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-owner-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(
+                ".lr-owner-nav-link"
+            )
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-owner-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+
+    <!-- ============================================================
+         MAIN
+    ============================================================ -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div>
+
+                <h1>
+                    My Screens
+                </h1>
+
+                <p>
+                    View and manage the digital screens
+                    registered under your account.
+                </p>
+
+            </div>
+
+
+            <button
+                class="register-btn"
+                onclick="toggleRegisterForm()"
+            >
+                + Register Screen
+            </button>
+
+        </div>
+
+
+
+        <!-- ========================================================
+             REGISTER SCREEN FORM
+        ======================================================== -->
+
+        <section
+            id="registerFormCard"
+            class="form-card"
+        >
+
+            <h2>
+                Register New Screen
+            </h2>
+
+
+            <p class="form-description">
+                Submit your screen for admin approval.
+                New screens will remain pending until approved.
+            </p>
+
+
+            <form
+                id="screenForm"
+                onsubmit="registerScreen(event)"
+            >
+
+
+                <div class="form-grid">
+
+
+                    <!-- SCREEN ID -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Screen ID *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="screenId"
+                            placeholder="LR-SCREEN-002"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- SCREEN NAME -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Screen Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="screenName"
+                            placeholder="ABC Store Display"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- BUSINESS NAME -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Business Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="businessName"
+                            placeholder="ABC Store"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- BUSINESS CATEGORY -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Business Category
+                        </label>
+
+                        <input
+                            type="text"
+                            id="businessCategory"
+                            placeholder="Retail"
+                        >
+
+                    </div>
+
+
+
+                    <!-- ADDRESS -->
+
+                    <div class="form-group full">
+
+                        <label>
+                            Address
+                        </label>
+
+                        <input
+                            type="text"
+                            id="address"
+                            placeholder="Shop address"
+                        >
+
+                    </div>
+
+
+
+                    <!-- CITY -->
+
+                    <div class="form-group">
+
+                        <label>
+                            City *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="city"
+                            placeholder="Guntur"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- AREA -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Area *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="area"
+                            placeholder="Brodipet"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- LATITUDE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Latitude
+                        </label>
+
+                        <input
+                            type="number"
+                            id="latitude"
+                            step="any"
+                            placeholder="Optional"
+                        >
+
+                    </div>
+
+
+
+                    <!-- LONGITUDE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Longitude
+                        </label>
+
+                        <input
+                            type="number"
+                            id="longitude"
+                            step="any"
+                            placeholder="Optional"
+                        >
+
+                    </div>
+
+
+
+                    <!-- SCREEN TYPE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Screen Type *
+                        </label>
+
+                        <select
+                            id="screenType"
+                            required
+                        >
+
+                            <option value="">
+                                Select screen type
+                            </option>
+
+                            <option value="Digital Display">
+                                Digital Display
+                            </option>
+
+                            <option value="LED Display">
+                                LED Display
+                            </option>
+
+                            <option value="TV Display">
+                                TV Display
+                            </option>
+
+                            <option value="Indoor Display">
+                                Indoor Display
+                            </option>
+
+                            <option value="Outdoor Display">
+                                Outdoor Display
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- SCREEN SIZE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Screen Size *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="screenSize"
+                            placeholder="43 inch"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- OPERATING START -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Operating Start
+                        </label>
+
+                        <input
+                            type="time"
+                            id="operatingStart"
+                            value="09:00"
+                        >
+
+                    </div>
+
+
+
+                    <!-- OPERATING END -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Operating End
+                        </label>
+
+                        <input
+                            type="time"
+                            id="operatingEnd"
+                            value="21:00"
+                        >
+
+                    </div>
+
+
+
+                    <!-- AD START -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Available Ad Start
+                        </label>
+
+                        <input
+                            type="time"
+                            id="availableAdStart"
+                            value="10:00"
+                        >
+
+                    </div>
+
+
+
+                    <!-- AD END -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Available Ad End
+                        </label>
+
+                        <input
+                            type="time"
+                            id="availableAdEnd"
+                            value="20:00"
+                        >
+
+                    </div>
+
+
+
+                    <!-- PRICE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Price Per Week (₹)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="pricePerWeek"
+                            min="0"
+                            step="0.01"
+                            value="99"
+                        >
+
+                    </div>
+
+
+
+                    <!-- DAILY PLAYS -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Estimated Daily Plays
+                        </label>
+
+                        <input
+                            type="number"
+                            id="estimatedDailyPlays"
+                            min="0"
+                            step="1"
+                            value="100"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- FORM ACTIONS -->
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                        id="submitButton"
+                    >
+                        Submit for Approval
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="toggleRegisterForm()"
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="formMessage"
+                    class="form-message"
+                ></div>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ========================================================
+             EXISTING SCREENS
+        ======================================================== -->
+
+        <div
+            id="screensContainer"
+            class="screens-grid"
+        >
+
+            <div class="empty">
+                Loading screens...
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+
+    <script>
+
+
+        /* ============================================================
+           TOKEN
+        ============================================================ */
+
+        const token =
+            localStorage.getItem("token");
+
+
+        if (!token) {
+
+            window.location.href =
+                "../login.html";
+
+        }
+
+
+
+        /* ============================================================
+           TOGGLE REGISTER FORM
+        ============================================================ */
+
+        function toggleRegisterForm() {
+
+            const formCard =
+                document.getElementById(
+                    "registerFormCard"
+                );
+
+
+            formCard.classList.toggle("show");
+
+        }
+
+
+
+        /* ============================================================
+           REGISTER SCREEN
+        ============================================================ */
+
+        async function registerScreen(event) {
+
+            event.preventDefault();
+
+
+            const submitButton =
+                document.getElementById(
+                    "submitButton"
+                );
+
+
+            const message =
+                document.getElementById(
+                    "formMessage"
+                );
+
+
+            message.className =
+                "form-message";
+
+
+            message.textContent = "";
+
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                "Submitting...";
+
+
+            try {
+
+
+                const payload = {
+
+                    screenId:
+                        document.getElementById(
+                            "screenId"
+                        ).value.trim(),
+
+                    screenName:
+                        document.getElementById(
+                            "screenName"
+                        ).value.trim(),
+
+                    businessName:
+                        document.getElementById(
+                            "businessName"
+                        ).value.trim(),
+
+                    businessCategory:
+                        document.getElementById(
+                            "businessCategory"
+                        ).value.trim(),
+
+                    address:
+                        document.getElementById(
+                            "address"
+                        ).value.trim(),
+
+                    city:
+                        document.getElementById(
+                            "city"
+                        ).value.trim(),
+
+                    area:
+                        document.getElementById(
+                            "area"
+                        ).value.trim(),
+
+                    latitude:
+                        document.getElementById(
+                            "latitude"
+                        ).value,
+
+                    longitude:
+                        document.getElementById(
+                            "longitude"
+                        ).value,
+
+                    screenType:
+                        document.getElementById(
+                            "screenType"
+                        ).value,
+
+                    screenSize:
+                        document.getElementById(
+                            "screenSize"
+                        ).value.trim(),
+
+                    operatingStart:
+                        document.getElementById(
+                            "operatingStart"
+                        ).value,
+
+                    operatingEnd:
+                        document.getElementById(
+                            "operatingEnd"
+                        ).value,
+
+                    availableAdStart:
+                        document.getElementById(
+                            "availableAdStart"
+                        ).value,
+
+                    availableAdEnd:
+                        document.getElementById(
+                            "availableAdEnd"
+                        ).value,
+
+                    pricePerWeek:
+                        document.getElementById(
+                            "pricePerWeek"
+                        ).value,
+
+                    estimatedDailyPlays:
+                        document.getElementById(
+                            "estimatedDailyPlays"
+                        ).value
+
+                };
+
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/screens",
+                        {
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "Authorization":
+                                    "Bearer " + token
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to register screen"
+                    );
+
+                }
+
+
+                message.className =
+                    "form-message success";
+
+
+                message.textContent =
+                    data.message ||
+                    "Screen registered successfully and submitted for approval.";
+
+
+                document
+                    .getElementById(
+                        "screenForm"
+                    )
+                    .reset();
+
+
+                document.getElementById(
+                    "pricePerWeek"
+                ).value = "99";
+
+
+                document.getElementById(
+                    "estimatedDailyPlays"
+                ).value = "100";
+
+
+                document.getElementById(
+                    "operatingStart"
+                ).value = "09:00";
+
+
+                document.getElementById(
+                    "operatingEnd"
+                ).value = "21:00";
+
+
+                document.getElementById(
+                    "availableAdStart"
+                ).value = "10:00";
+
+
+                document.getElementById(
+                    "availableAdEnd"
+                ).value = "20:00";
+
+
+                await loadScreens();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Screen registration error:",
+                    error
+                );
+
+
+                message.className =
+                    "form-message error";
+
+
+                message.textContent =
+                    error.message ||
+                    "Failed to register screen";
+
+
+            } finally {
+
+                submitButton.disabled =
+                    false;
+
+                submitButton.textContent =
+                    "Submit for Approval";
+
+            }
+
+        }
+
+
+
+        /* ============================================================
+           LOAD OWNER SCREENS
+        ============================================================ */
+
+        async function loadScreens() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/owner/dashboard",
+                        {
+                            headers: {
+                                "Authorization":
+                                    "Bearer " + token
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load screens"
+                    );
+
+                }
+
+
+                displayScreens(
+                    data.screens || []
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Screen loading error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "screensContainer"
+                ).innerHTML = `
+
+                    <div class="error">
+
+                        Failed to load your screens.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+
+        /* ============================================================
+           DISPLAY SCREENS
+        ============================================================ */
+
+        function displayScreens(screens) {
+
+            const container =
+                document.getElementById(
+                    "screensContainer"
+                );
+
+
+            if (
+                !screens ||
+                screens.length === 0
+            ) {
+
+                container.className =
+                    "screens-grid";
+
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        No screens registered yet.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.className =
+                "screens-grid";
+
+
+            container.innerHTML = "";
+
+
+            screens.forEach(screen => {
+
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "screen-card";
+
+
+                const status =
+                    String(
+                        screen.status ||
+                        "pending"
+                    ).toLowerCase();
+
+
+                card.innerHTML = `
+
+                    <div class="screen-header">
+
+                        <div>
+
+                            <h2>
+                                ${escapeHtml(
+                                    screen.screen_name
+                                )}
+                            </h2>
+
+
+                            <div class="screen-id">
+
+                                ID:
+                                ${escapeHtml(
+                                    screen.screen_id
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <span
+                            class="status ${status}"
+                        >
+                            ${escapeHtml(
+                                screen.status
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div class="details">
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                Business
+                            </span>
+
+                            <span class="detail-value">
+                                ${escapeHtml(
+                                    screen.business_name
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                Category
+                            </span>
+
+                            <span class="detail-value">
+                                ${escapeHtml(
+                                    screen.business_category ||
+                                    "-"
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                Location
+                            </span>
+
+                            <span class="detail-value">
+
+                                ${escapeHtml(
+                                    screen.area || "-"
+                                )},
+
+                                ${escapeHtml(
+                                    screen.city || "-"
+                                )}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                Screen Type
+                            </span>
+
+                            <span class="detail-value">
+                                ${escapeHtml(
+                                    screen.screen_type ||
+                                    "-"
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                Screen Size
+                            </span>
+
+                            <span class="detail-value">
+                                ${escapeHtml(
+                                    screen.screen_size ||
+                                    "-"
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                Weekly Price
+                            </span>
+
+                            <span class="detail-value">
+
+                                ₹${Number(
+                                    screen.price_per_week ||
+                                    0
+                                ).toFixed(2)}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-row">
+
+                            <span class="detail-label">
+                                Estimated Daily Plays
+                            </span>
+
+                            <span class="detail-value">
+
+                                ${Number(
+                                    screen.estimated_daily_plays ||
+                                    0
+                                )}
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    card
+                );
+
+            });
+
+        }
+
+
+
+        /* ============================================================
+           HTML ESCAPE
+        ============================================================ */
+
+        function escapeHtml(value) {
+
+            return String(
+                value ?? ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+
+        /* ============================================================
+           NOTIFICATION COUNT
+        ============================================================ */
+
+        async function loadNotificationCount() {
+
+            if (!token) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/notifications/unread-count",
+                        {
+                            headers: {
+                                "Authorization":
+                                    "Bearer " + token
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+                    return;
+                }
+
+
+                const count =
+                    Number(
+                        data.unreadCount
+                    ) || 0;
+
+
+                const badge =
+                    document.getElementById(
+                        "notificationBadge"
+                    );
+
+
+                if (!badge) {
+                    return;
+                }
+
+
+                if (count > 0) {
+
+                    badge.textContent =
+                        count > 99
+                            ? "99+"
+                            : count;
+
+                    badge.style.display =
+                        "inline-flex";
+
+                } else {
+
+                    badge.style.display =
+                        "none";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Notification count error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        /* ============================================================
+           PROFILE
+        ============================================================ */
+
+        function openProfile(event) {
+
+            event.preventDefault();
+
+
+            const user =
+                JSON.parse(
+                    localStorage.getItem(
+                        "user"
+                    ) || "{}"
+                );
+
+
+            alert(
+
+                "Profile\n\n" +
+
+                "Name: " +
+                (user.full_name || "-") +
+
+                "\nEmail: " +
+                (user.email || "-") +
+
+                "\nPhone: " +
+                (user.phone || "-") +
+
+                "\nRole: " +
+                (user.role || "-")
+
+            );
+
+        }
+
+
+
+        /* ============================================================
+           LOGOUT
+        ============================================================ */
+
+        function logout() {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            localStorage.removeItem(
+                "user"
+            );
+
+
+            window.location.href =
+                "../login.html";
+
+        }
+
+
+
+        /* ============================================================
+           INITIAL LOAD
+        ============================================================ */
+
+        loadScreens();
+
+        loadNotificationCount();
+
+
+    </script>
+
+
+</body>
+
+</html>

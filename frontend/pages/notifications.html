@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Notifications - LocalReach</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/app.css"
+    >
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #0f172a;
+        }
+
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 25px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0 0 6px;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #64748b;
+        }
+
+        .button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            background: #111827;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background: #1f2937;
+        }
+
+        .notifications {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notification {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            box-shadow:
+                0 3px 12px
+                rgba(15, 23, 42, 0.05);
+        }
+
+        .notification.unread {
+            border-left: 4px solid #f97316;
+        }
+
+        .notification-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .notification-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .notification-message {
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .notification-date {
+            color: #94a3b8;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .unread-badge {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 4px 9px;
+            border-radius: 20px;
+            background: #fff7ed;
+            color: #c2410c;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .read-button {
+            margin-top: 14px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #334155;
+            padding: 8px 12px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .read-button:hover {
+            background: #f8fafc;
+        }
+
+        .empty {
+            background: white;
+            border-radius: 12px;
+            padding: 50px 25px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 650px) {
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .notification-top {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <main class="page">
+
+
+        <div class="header">
+
+            <div>
+
+                <h1>
+                    Notifications
+                </h1>
+
+                <p>
+                    Stay updated on your LocalReach activity.
+                </p>
+
+            </div>
+
+
+            <button
+                class="button"
+                onclick="markAllAsRead()"
+            >
+                Mark All as Read
+            </button>
+
+        </div>
+
+
+        <div
+            id="notifications"
+            class="notifications"
+        >
+
+            <div class="empty">
+                Loading notifications...
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+    <script src="../js/config.js"></script>
+
+
+    <script>
+
+        requireLogin();
+
+
+        function escapeHtml(value) {
+
+            return String(value || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        function formatDate(dateValue) {
+
+            if (!dateValue) {
+                return "-";
+            }
+
+            return new Date(dateValue)
+                .toLocaleString("en-IN");
+
+        }
+
+
+        async function loadNotifications() {
+
+            const container =
+                document.getElementById(
+                    "notifications"
+                );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        SPOTLOCAL_API +
+                        "/notifications",
+                        {
+                            headers:
+                                authHeaders()
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load notifications"
+                    );
+
+                }
+
+
+                const notifications =
+                    Array.isArray(
+                        data.notifications
+                    )
+                        ? data.notifications
+                        : [];
+
+
+                if (
+                    notifications.length === 0
+                ) {
+
+                    container.innerHTML = `
+
+                        <div class="empty">
+
+                            <h3>
+                                No notifications
+                            </h3>
+
+                            <p>
+                                You're all caught up.
+                            </p>
+
+                        </div>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                container.innerHTML =
+                    notifications
+                        .map(notification => {
+
+                            const unread =
+                                !notification.is_read;
+
+
+                            return `
+
+                                <div
+                                    class="notification ${
+                                        unread
+                                            ? "unread"
+                                            : ""
+                                    }"
+                                >
+
+                                    <div
+                                        class="notification-top"
+                                    >
+
+                                        <div>
+
+                                            <div
+                                                class="notification-title"
+                                            >
+                                                ${
+                                                    escapeHtml(
+                                                        notification.title
+                                                    )
+                                                }
+                                            </div>
+
+                                            <div
+                                                class="notification-message"
+                                            >
+                                                ${
+                                                    escapeHtml(
+                                                        notification.message
+                                                    )
+                                                }
+                                            </div>
+
+                                        </div>
+
+
+                                        <div
+                                            class="notification-date"
+                                        >
+                                            ${
+                                                formatDate(
+                                                    notification.created_at
+                                                )
+                                            }
+                                        </div>
+
+                                    </div>
+
+
+                                    ${
+                                        unread
+                                            ? `
+
+                                                <span
+                                                    class="unread-badge"
+                                                >
+                                                    Unread
+                                                </span>
+
+
+                                                <br>
+
+
+                                                <button
+                                                    class="read-button"
+                                                    onclick="markAsRead('${notification.id}')"
+                                                >
+                                                    Mark as Read
+                                                </button>
+
+                                            `
+                                            : ""
+                                    }
+
+                                </div>
+
+                            `;
+
+                        })
+                        .join("");
+
+
+            } catch (error) {
+
+                console.error(
+                    "Notification loading error:",
+                    error
+                );
+
+
+                container.innerHTML = `
+
+                    <div class="error">
+
+                        Failed to load notifications.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        async function markAsRead(
+            notificationId
+        ) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        SPOTLOCAL_API +
+                        "/notifications/" +
+                        notificationId +
+                        "/read",
+                        {
+                            method: "PATCH",
+
+                            headers:
+                                authHeaders()
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to mark notification as read"
+                    );
+
+                }
+
+
+                await loadNotifications();
+
+            } catch (error) {
+
+                console.error(
+                    "Mark notification read error:",
+                    error
+                );
+
+                alert(
+                    error.message ||
+                    "Failed to update notification"
+                );
+
+            }
+
+        }
+
+
+        async function markAllAsRead() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        SPOTLOCAL_API +
+                        "/notifications/read-all",
+                        {
+                            method: "PATCH",
+
+                            headers:
+                                authHeaders()
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to mark notifications as read"
+                    );
+
+                }
+
+
+                await loadNotifications();
+
+            } catch (error) {
+
+                console.error(
+                    "Mark all notifications error:",
+                    error
+                );
+
+                alert(
+                    error.message ||
+                    "Failed to update notifications"
+                );
+
+            }
+
+        }
+
+
+        loadNotifications();
+
+    </script>
+
+
+</body>
+
+</html>

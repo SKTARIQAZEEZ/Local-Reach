@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Users - Admin | LocalReach</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fa;
+            color: #111827;
+        }
+
+        /* =========================================
+           SIDEBAR
+        ========================================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            width: 240px;
+
+            background: #111827;
+            color: white;
+
+            padding: 25px 15px;
+
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+
+            margin-bottom: 30px;
+
+            padding-left: 10px;
+        }
+
+        .nav-link {
+            display: block;
+
+            padding: 12px 15px;
+
+            margin-bottom: 6px;
+
+            color: #d1d5db;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+
+            transition: background 0.2s ease,
+                        color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: #374151;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        .main {
+            margin-left: 240px;
+
+            padding: 40px;
+
+            min-height: 100vh;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+
+            font-size: 28px;
+        }
+
+        .subtitle {
+            margin: 0 0 25px;
+
+            color: #6b7280;
+
+            font-size: 15px;
+        }
+
+        /* =========================================
+           CARD
+        ========================================= */
+
+        .card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.06);
+
+            overflow-x: auto;
+        }
+
+        /* =========================================
+           TABLE
+        ========================================= */
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 700px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f9fafb;
+
+            font-size: 14px;
+
+            color: #374151;
+        }
+
+        td {
+            font-size: 14px;
+
+            color: #374151;
+        }
+
+        tr:hover td {
+            background: #f9fafb;
+        }
+
+        /* =========================================
+           STATUS
+        ========================================= */
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            text-transform: capitalize;
+        }
+
+        .advertiser {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .screen_owner {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .admin {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* =========================================
+           EMPTY / ERROR
+        ========================================= */
+
+        .empty {
+            padding: 30px;
+
+            text-align: center;
+
+            color: #6b7280;
+        }
+
+        .error {
+            padding: 20px;
+
+            color: #b91c1c;
+
+            background: #fee2e2;
+
+            border-radius: 8px;
+        }
+
+        .loading {
+            padding: 20px;
+
+            text-align: center;
+
+            color: #6b7280;
+        }
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                min-height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================= -->
+
+    <!-- =========================================
+     ADMIN NAVIGATION
+========================================= -->
+
+<aside class="lr-sidebar">
+
+    <div class="lr-logo">
+        LocalReach
+    </div>
+
+    <a href="dashboard.html" class="lr-nav-link">
+        🏠 Dashboard
+    </a>
+
+    <a href="payouts.html" class="lr-nav-link">
+        💰 Payouts
+    </a>
+
+    <a href="users.html" class="lr-nav-link">
+        👥 Users
+    </a>
+
+    <a href="screens.html" class="lr-nav-link">
+        🖥️ Screens
+    </a>
+
+    <a href="campaigns.html" class="lr-nav-link">
+        📋 Campaigns
+    </a>
+
+    <a href="advertisements.html" class="lr-nav-link">
+        📢 Advertisements
+    </a>
+
+    <a href="analytics.html" class="lr-nav-link">
+        📊 Advertisement Analytics
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH ADMIN NAVIGATION
+    ========================================= */
+
+    .lr-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-nav-link.lr-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+       The correct option stays highlighted
+       on every admin page.
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(".lr-nav-link")
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================= -->
+
+    <main class="main">
+
+        <h1>
+            User Management
+        </h1>
+
+        <p class="subtitle">
+            View all users registered on the LocalReach platform.
+        </p>
+
+
+        <div class="card">
+
+            <div id="userContainer">
+
+                <div class="loading">
+                    Loading users...
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         CONFIG
+    ========================================= -->
+
+    <script src="../../js/config.js"></script>
+
+
+    <script>
+
+        /* =========================================
+           AUTHENTICATION
+        ========================================= */
+
+        requireLogin();
+
+
+        /* =========================================
+           LOAD USERS
+        ========================================= */
+
+        async function loadUsers() {
+
+            const container =
+                document.getElementById(
+                    "userContainer"
+                );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${window.SPOTLOCAL_API}/admin/users`,
+                        {
+                            method: "GET",
+                            headers: authHeaders()
+                        }
+                    );
+
+
+                /* ---------------------------------
+                   AUTH ERROR
+                --------------------------------- */
+
+                if (
+                    response.status === 401 ||
+                    response.status === 403
+                ) {
+
+                    alert(
+                        "Admin authentication required."
+                    );
+
+                    logout();
+
+                    return;
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                /* ---------------------------------
+                   OTHER ERROR
+                --------------------------------- */
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load users"
+                    );
+                }
+
+
+                /* ---------------------------------
+                   DISPLAY USERS
+                --------------------------------- */
+
+                displayUsers(
+                    data.users || []
+                );
+
+
+            }
+            catch (error) {
+
+                console.error(
+                    "User loading error:",
+                    error
+                );
+
+
+                container.innerHTML = `
+
+                    <div class="error">
+
+                        Failed to load users.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================
+           DISPLAY USERS
+        ========================================= */
+
+        function displayUsers(users) {
+
+            const container =
+                document.getElementById(
+                    "userContainer"
+                );
+
+
+            /* ---------------------------------
+               EMPTY
+            --------------------------------- */
+
+            if (
+                !users ||
+                users.length === 0
+            ) {
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        No users found.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            /* ---------------------------------
+               TABLE
+            --------------------------------- */
+
+            let html = `
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Role
+                            </th>
+
+                            <th>
+                                Created
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+            `;
+
+
+            users.forEach(
+                function(user) {
+
+                    const role =
+                        user.role ||
+                        "unknown";
+
+
+                    const name =
+                        user.name ||
+                        user.full_name ||
+                        user.username ||
+                        "-";
+
+
+                    const email =
+                        user.email ||
+                        "-";
+
+
+                    const phone =
+                        user.phone ||
+                        user.mobile ||
+                        "-";
+
+
+                    let created =
+                        user.created_at ||
+                        user.createdAt ||
+                        "-";
+
+
+                    if (
+                        created !== "-" &&
+                        !isNaN(
+                            new Date(created)
+                        )
+                    ) {
+
+                        created =
+                            new Date(created)
+                                .toLocaleDateString();
+
+                    }
+
+
+                    html += `
+
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    String(
+                                        user.id ??
+                                        "-"
+                                    )
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    String(name)
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    String(email)
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    String(phone)
+                                )}
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="status ${escapeHtml(
+                                        role
+                                    )}"
+                                >
+                                    ${escapeHtml(
+                                        role.replace(
+                                            "_",
+                                            " "
+                                        )
+                                    )}
+                                </span>
+
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    String(created)
+                                )}
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            );
+
+
+            html += `
+
+                    </tbody>
+
+                </table>
+
+            `;
+
+
+            container.innerHTML =
+                html;
+
+        }
+
+
+        /* =========================================
+           SAFE HTML
+        ========================================= */
+
+        function escapeHtml(value) {
+
+            return value
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =========================================
+           LOAD ON PAGE OPEN
+        ========================================= */
+
+        loadUsers();
+
+    </script>
+
+
+</body>
+
+</html>

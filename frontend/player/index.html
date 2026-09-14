@@ -1,0 +1,1434 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
+
+        <title>LocalReach TV Player</title>
+
+
+        <style>
+
+            * {
+                box-sizing: border-box;
+            }
+
+
+            html,
+            body {
+
+                margin: 0;
+                padding: 0;
+
+                width: 100%;
+                height: 100%;
+
+                overflow: hidden;
+
+                background: #000;
+
+                font-family: Arial, sans-serif;
+            }
+
+
+            #player {
+
+                width: 100vw;
+                height: 100vh;
+
+                display: flex;
+
+                align-items: center;
+                justify-content: center;
+
+                background: #000;
+
+                color: white;
+            }
+
+
+            #welcome {
+
+                text-align: center;
+            }
+
+
+            #welcome h1 {
+
+                font-size: 48px;
+
+                margin-bottom: 15px;
+            }
+
+
+            #welcome p {
+
+                font-size: 22px;
+
+                color: #aaa;
+            }
+
+
+            #screenInfo {
+
+                position: fixed;
+
+                top: 20px;
+                left: 20px;
+
+                background: rgba(0, 0, 0, 0.7);
+
+                padding: 12px 18px;
+
+                border-radius: 8px;
+
+                font-size: 14px;
+
+                display: none;
+
+                z-index: 10;
+            }
+
+
+            #status {
+
+                position: fixed;
+
+                bottom: 20px;
+                right: 20px;
+
+                background: rgba(0, 0, 0, 0.7);
+
+                padding: 10px 16px;
+
+                border-radius: 8px;
+
+                font-size: 14px;
+
+                display: none;
+
+                z-index: 10;
+            }
+
+
+            #videoPlayer {
+
+                width: 100%;
+                height: 100%;
+
+                object-fit: contain;
+
+                display: none;
+
+                background: #000;
+            }
+
+
+            #imagePlayer {
+
+                max-width: 100%;
+                max-height: 100%;
+
+                object-fit: contain;
+
+                display: none;
+            }
+
+
+            #adTitle {
+
+                position: fixed;
+
+                top: 20px;
+                left: 50%;
+
+                transform: translateX(-50%);
+
+                background: rgba(0, 0, 0, 0.7);
+
+                padding: 10px 20px;
+
+                border-radius: 8px;
+
+                font-size: 20px;
+
+                display: none;
+
+                z-index: 10;
+            }
+
+        </style>
+
+    </head>
+
+
+    <body>
+
+
+        <div id="player">
+
+
+            <div id="welcome">
+
+                <h1>
+                    LocalReach
+                </h1>
+
+                <p>
+                    TV Advertisement Player
+                </p>
+
+                <p id="welcomeMessage">
+                    Waiting for advertisements...
+                </p>
+
+            </div>
+
+
+            <video
+                id="videoPlayer"
+                muted
+                playsinline
+                autoplay
+            ></video>
+
+
+            <img
+                id="imagePlayer"
+                alt="Advertisement"
+            >
+
+
+        </div>
+
+
+        <div id="screenInfo">
+
+            Screen:
+
+            <strong id="screenIdText">
+                Not Registered
+            </strong>
+
+        </div>
+
+
+        <div id="status">
+
+            Status:
+
+            <strong id="statusText">
+                Waiting
+            </strong>
+
+        </div>
+
+
+        <div id="adTitle"></div>
+
+
+        <script>
+
+
+            /*
+            * ============================================================
+            * LocalReach TV Player
+            * Phase 4
+            * Advertisement Playback
+            * ============================================================
+            */
+
+
+            // ------------------------------------------------------------
+            // Screen identity
+            // ------------------------------------------------------------
+
+            const screenId =
+                new URLSearchParams(
+                    window.location.search
+                ).get("screen");
+            
+    const deviceId = "TV-DEVICE-001";
+
+            // ------------------------------------------------------------
+            // DOM elements
+            // ------------------------------------------------------------
+
+            const welcome =
+                document.getElementById("welcome");
+
+
+            const welcomeMessage =
+                document.getElementById(
+                    "welcomeMessage"
+                );
+
+
+            const videoPlayer =
+                document.getElementById(
+                    "videoPlayer"
+                );
+
+
+            const imagePlayer =
+                document.getElementById(
+                    "imagePlayer"
+                );
+
+
+            const screenInfo =
+                document.getElementById(
+                    "screenInfo"
+                );
+
+
+            const screenIdText =
+                document.getElementById(
+                    "screenIdText"
+                );
+
+
+            const status =
+                document.getElementById(
+                    "status"
+                );
+
+
+            const statusText =
+                document.getElementById(
+                    "statusText"
+                );
+
+
+            const adTitle =
+                document.getElementById(
+                    "adTitle"
+                );
+
+
+            // ------------------------------------------------------------
+            // Advertisement state
+            // ------------------------------------------------------------
+
+            let advertisements = [];
+
+            let currentAdIndex = 0;
+
+            let currentAdvertisement = null;
+
+            let playbackStartTime = null;
+    let playbackCompleted = false;
+    let imageTimer = null;
+
+    // ID returned by the backend when playback starts
+    let currentPlaybackId = null;
+
+            // ------------------------------------------------------------
+            // Initialize player
+            // ------------------------------------------------------------
+
+            function initializePlayer() {
+
+
+                if (!screenId) {
+
+                    console.error(
+                        "Screen ID is missing"
+                    );
+
+                    status.style.display =
+                        "block";
+
+                    statusText.textContent =
+                        "Screen ID Required";
+
+                    return;
+                }
+
+
+                screenIdText.textContent =
+                    screenId;
+
+
+                screenInfo.style.display =
+                    "block";
+
+
+                status.style.display =
+                    "block";
+
+
+                statusText.textContent =
+                    "Connecting...";
+
+
+                console.log(
+                    "================================"
+                );
+
+                console.log(
+                    "LocalReach TV Player started"
+                );
+
+                console.log(
+                    "Screen ID:",
+                    screenId
+                );
+
+                console.log(
+                    "================================"
+                );
+
+
+                registerPlayer();
+
+            }
+
+
+            // ------------------------------------------------------------
+            // Register player
+            // ------------------------------------------------------------
+
+
+async function registerPlayer() {
+
+    try {
+
+        console.log(
+            "Registering TV device..."
+        );
+
+        const response =
+            await fetch(
+                "/api/player/device/register",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            deviceId:
+                                deviceId,
+
+                            screenId:
+                                screenId,
+
+                            deviceName:
+                                "LocalReach TV Player",
+
+                            deviceType:
+                                "tv"
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Device registration response:",
+            data
+        );
+
+
+        if (!response.ok) {
+
+            statusText.textContent =
+                data.message ||
+                "Device registration failed";
+
+            console.error(
+                "Device registration failed:",
+                data.message
+            );
+
+            return;
+        }
+
+
+        statusText.textContent =
+            "Connected";
+
+
+        console.log(
+            "TV device registered successfully"
+        );
+
+
+        // Start device heartbeat
+        sendDeviceHeartbeat();
+
+
+        // Load advertisements
+        fetchAdvertisements();
+
+
+    } catch (error) {
+
+        console.error(
+            "Device registration error:",
+            error
+        );
+
+
+        statusText.textContent =
+            "Connection Error";
+
+    }
+
+}
+
+                    // ------------------------------------------------------------
+            // Device heartbeat
+            // ------------------------------------------------------------
+
+            async function sendDeviceHeartbeat() {
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/player/heartbeat",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+        JSON.stringify({
+            deviceId:
+                deviceId,
+            screenId:
+                screenId
+        })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        console.error(
+                            "Device heartbeat failed:",
+                            data.message
+                        );
+
+                        return;
+                    }
+
+
+                    console.log(
+                        "Device heartbeat:",
+                        data.message
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Device heartbeat error:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            // Send heartbeat every 30 seconds
+
+            setInterval(
+                function() {
+
+                    sendDeviceHeartbeat();
+
+                },
+                30000
+            );
+            // ------------------------------------------------------------
+            // Fetch advertisements
+            // ------------------------------------------------------------
+
+            async function fetchAdvertisements() {
+
+
+                try {
+
+                    console.log(
+                        "Fetching advertisements..."
+                    );
+
+
+                    const response =
+                        await fetch(
+                            `/api/player/ads/${encodeURIComponent(screenId)}`
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    console.log(
+                        "Advertisement response:",
+                        data
+                    );
+
+
+                    if (!response.ok) {
+
+                        statusText.textContent =
+                            data.message ||
+                            "Unable to load advertisements";
+
+                        return;
+                    }
+
+
+                    advertisements =
+                        data.advertisements || [];
+
+
+                    console.log(
+                        "Advertisements found:",
+                        advertisements.length
+                    );
+
+
+                    // ------------------------------------------------
+                    // No advertisements
+                    // ------------------------------------------------
+
+                    if (
+                        advertisements.length === 0
+                    ) {
+
+                        showWaiting();
+
+                        return;
+                    }
+
+
+                    // ------------------------------------------------
+                    // Advertisements available
+                    // ------------------------------------------------
+
+                    statusText.textContent =
+                        "Playing";
+
+
+                    currentAdIndex = 0;
+
+
+                    playNextAdvertisement();
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Advertisement fetch error:",
+                        error
+                    );
+
+
+                    statusText.textContent =
+                        "Advertisement Error";
+
+                }
+
+            }
+
+
+            // ------------------------------------------------------------
+            // Waiting screen
+            // ------------------------------------------------------------
+
+            function showWaiting() {
+
+
+                welcome.style.display =
+                    "block";
+
+
+                welcomeMessage.textContent =
+                    "Waiting for advertisements...";
+
+
+                videoPlayer.pause();
+
+                videoPlayer.removeAttribute(
+                    "src"
+                );
+
+
+                videoPlayer.style.display =
+                    "none";
+
+
+                imagePlayer.style.display =
+                    "none";
+
+
+                adTitle.style.display =
+                    "none";
+
+
+                statusText.textContent =
+                    "Waiting";
+
+            }
+
+
+            // ------------------------------------------------------------
+            // Play next advertisement
+            // ------------------------------------------------------------
+
+            function playNextAdvertisement() {
+
+
+                if (
+                    advertisements.length === 0
+                ) {
+
+                    showWaiting();
+
+                    return;
+                }
+
+
+                const ad =
+                    advertisements[
+                        currentAdIndex
+                    ];
+
+
+                console.log(
+                    "--------------------------------"
+                );
+
+                console.log(
+                    "Playing advertisement:"
+                );
+
+                console.log(ad);
+
+
+                currentAdIndex =
+                    (
+                        currentAdIndex + 1
+                    ) %
+                    advertisements.length;
+
+
+                playAdvertisement(ad);
+
+            }
+
+
+            // ------------------------------------------------------------
+            // Play advertisement
+            // ------------------------------------------------------------
+            // ------------------------------------------------------------
+    // Start verified playback
+    // ------------------------------------------------------------
+
+    async function startPlayback(ad) {
+
+        try {
+
+            const campaignId =
+                ad.campaign_id;
+
+            const advertisementId =
+                ad.advertisement_id ||
+                ad.id;
+
+
+            console.log(
+                "Starting playback recording..."
+            );
+
+
+            console.log({
+                screenId,
+                campaignId,
+                advertisementId
+            });
+
+
+            const response =
+                await fetch(
+                    "/api/player/playback/start",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                screenId:
+                                    screenId,
+
+                                campaignId:
+                                    campaignId,
+
+                                advertisementId:
+                                    advertisementId
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                console.error(
+                    "Playback start failed:",
+                    data.message
+                );
+
+                currentPlaybackId = null;
+
+                return false;
+            }
+
+
+            currentPlaybackId =
+                data.playback?.id || null;
+
+
+            console.log(
+                "Playback recording started:",
+                data
+            );
+
+
+            console.log(
+                "Playback ID:",
+                currentPlaybackId
+            );
+
+
+            return true;
+
+
+        } catch (error) {
+
+            console.error(
+                "Playback start error:",
+                error
+            );
+
+            currentPlaybackId = null;
+
+            return false;
+        }
+
+    }
+            function playAdvertisement(ad) {
+
+
+                currentAdvertisement =
+                    ad;
+
+
+                playbackCompleted =
+                    false;
+
+
+                playbackStartTime =
+                    Date.now();
+
+
+                if (imageTimer) {
+
+                    clearTimeout(
+                        imageTimer
+                    );
+
+                    imageTimer = null;
+                }
+
+
+                welcome.style.display =
+                    "none";
+
+
+                adTitle.textContent =
+                    ad.advertisement_title ||
+                    "LocalReach Advertisement";
+
+
+                adTitle.style.display =
+                    "block";
+
+
+                const fileUrl =
+                    ad.file_url;
+
+
+                const fileType =
+                    (
+                        ad.file_type ||
+                        ""
+                    ).toLowerCase();
+
+
+                console.log(
+                    "Advertisement file:",
+                    fileUrl
+                );
+
+
+                console.log(
+                    "Advertisement type:",
+                    fileType
+                );
+
+
+                // ------------------------------------------------
+                // No media file
+                // ------------------------------------------------
+
+                if (!fileUrl) {
+
+                    console.warn(
+                        "Advertisement has no file URL"
+                    );
+
+
+                    showTemporaryMessage(
+                        ad.advertisement_title ||
+                        "Advertisement has no media file",
+                        Number(
+                            ad.duration_seconds
+                        ) || 30
+                    );
+
+
+                    return;
+                }
+
+
+                // ------------------------------------------------
+                // VIDEO
+                // ------------------------------------------------
+
+                if (
+                    fileType.includes("video") ||
+                    /\.(mp4|webm|ogg)(\?.*)?$/i.test(
+                        fileUrl
+                    )
+                ) {
+
+
+                    imagePlayer.style.display =
+                        "none";
+
+
+                    videoPlayer.style.display =
+                        "block";
+
+
+                    videoPlayer.pause();
+
+
+                    videoPlayer.removeAttribute(
+                        "src"
+                    );
+
+
+                    videoPlayer.load();
+
+
+                    videoPlayer.src =
+                        fileUrl;
+
+
+                    videoPlayer.currentTime =
+                        0;
+
+
+                    statusText.textContent =
+                        "Playing";
+
+
+                    videoPlayer
+                        .play()
+                        .then(
+                            () => {
+
+                                console.log(
+                                    "Video playback started"
+                                );
+
+                            }
+                        )
+                        .catch(
+                            error => {
+
+                                console.error(
+                                    "Video play error:",
+                                    error
+                                );
+
+
+                                statusText.textContent =
+                                    "Video Play Error";
+
+                            }
+                        );
+
+
+                    return;
+                }
+
+
+                // ------------------------------------------------
+                // IMAGE
+                // ------------------------------------------------
+
+                if (
+                    fileType.includes("image") ||
+                    /\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(
+                        fileUrl
+                    )
+                ) {
+
+
+                    videoPlayer.pause();
+
+
+                    videoPlayer.removeAttribute(
+                        "src"
+                    );
+
+
+                    videoPlayer.load();
+
+
+                    videoPlayer.style.display =
+                        "none";
+
+
+                    imagePlayer.style.display =
+                        "block";
+
+
+                    imagePlayer.src =
+                        fileUrl;
+
+
+                    statusText.textContent =
+                        "Playing";
+
+
+                    const duration =
+                        Number(
+                            ad.duration_seconds
+                        ) || 30;
+
+
+                    console.log(
+                        "Image playback duration:",
+                        duration,
+                        "seconds"
+                    );
+
+
+                    imageTimer =
+                        setTimeout(
+                            async function() {
+
+                                await completePlayback(
+                                    duration
+                                );
+
+                                playNextAdvertisement();
+
+                            },
+                            duration * 1000
+                        );
+
+
+                    return;
+                }
+
+
+                // ------------------------------------------------
+                // UNKNOWN FILE TYPE
+                // ------------------------------------------------
+
+                console.warn(
+                    "Unknown advertisement file type:",
+                    fileType
+                );
+
+
+                showTemporaryMessage(
+                    "Unsupported advertisement format",
+                    5
+                );
+
+            }
+
+
+            // ------------------------------------------------------------
+            // VIDEO ENDED
+            // ------------------------------------------------------------
+
+            videoPlayer.addEventListener(
+                "ended",
+                async function() {
+
+                    console.log(
+                        "Video finished successfully"
+                    );
+
+
+                    if (
+                        playbackCompleted
+                    ) {
+
+                        return;
+                    }
+
+
+                    const duration =
+                        playbackStartTime
+                            ? Math.max(
+                                1,
+                                Math.round(
+                                    (
+                                        Date.now() -
+                                        playbackStartTime
+                                    ) / 1000
+                                )
+                            )
+                            : (
+                                Number(
+                                    currentAdvertisement
+                                        ?.duration_seconds
+                                ) || 0
+                            );
+
+
+                    await completePlayback(
+                        duration
+                    );
+
+
+                    playNextAdvertisement();
+
+                }
+            );
+
+
+            // ------------------------------------------------------------
+            // VIDEO ERROR
+            // ------------------------------------------------------------
+
+            videoPlayer.addEventListener(
+                "error",
+                function() {
+
+                    console.error(
+                        "Video playback failed"
+                    );
+
+
+                    statusText.textContent =
+                        "Playback Failed";
+
+
+                    setTimeout(
+                        function() {
+
+                            playNextAdvertisement();
+
+                        },
+                        2000
+                    );
+
+                }
+            );
+
+
+            // ------------------------------------------------------------
+            // Record verified playback
+            // ------------------------------------------------------------
+
+            async function completePlayback(
+                duration
+            ) {
+
+
+                if (
+                    playbackCompleted
+                ) {
+
+                    return;
+                }
+
+
+                playbackCompleted =
+                    true;
+
+
+                if (
+                    !currentAdvertisement
+                ) {
+
+                    console.warn(
+                        "No current advertisement"
+                    );
+
+                    return;
+                }
+
+
+                const ad =
+                    currentAdvertisement;
+
+
+                const campaignId =
+                    ad.campaign_id;
+
+
+                const advertisementId =
+                    ad.advertisement_id ||
+                    ad.id;
+
+
+                console.log(
+                    "Recording verified playback..."
+                );
+
+
+                console.log({
+                    screenId,
+                    campaignId,
+                    advertisementId,
+                    duration
+                });
+
+
+                try {
+
+
+                    const response =
+                        await fetch(
+                            "/api/player/playback",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        screenId:
+                                            screenId,
+
+                                        campaignId:
+                                            campaignId,
+
+                                        advertisementId:
+                                            advertisementId,
+
+                                        durationSeconds:
+                                            duration
+
+                                    })
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        console.error(
+                            "Playback recording failed:",
+                            data.message
+                        );
+
+                        return;
+                    }
+
+
+                    console.log(
+                        "Playback recorded successfully:",
+                        data
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Playback recording error:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            // ------------------------------------------------------------
+            // Temporary message
+            // ------------------------------------------------------------
+
+            function showTemporaryMessage(
+                message,
+                seconds
+            ) {
+
+
+                welcome.style.display =
+                    "block";
+
+
+                welcomeMessage.textContent =
+                    message;
+
+
+                videoPlayer.style.display =
+                    "none";
+
+
+                imagePlayer.style.display =
+                    "none";
+
+
+                adTitle.style.display =
+                    "none";
+
+
+                statusText.textContent =
+                    "Waiting";
+
+
+                setTimeout(
+                    function() {
+
+                        playNextAdvertisement();
+
+                    },
+                    seconds * 1000
+                );
+
+            }
+
+
+            // ------------------------------------------------------------
+            // Refresh advertisements
+            // ------------------------------------------------------------
+
+            setInterval(
+                function() {
+
+                    console.log(
+                        "Refreshing advertisements..."
+                    );
+
+
+                    fetchAdvertisements();
+
+                },
+                60000
+            );
+
+
+            // ------------------------------------------------------------
+            // Fullscreen
+            // ------------------------------------------------------------
+
+            function enterFullscreen() {
+
+
+                if (
+                    document.documentElement
+                        .requestFullscreen
+                ) {
+
+                    document.documentElement
+                        .requestFullscreen()
+                        .catch(
+                            () => {}
+                        );
+
+                }
+
+            }
+
+
+            // ------------------------------------------------------------
+            // Keyboard shortcut
+            // ------------------------------------------------------------
+
+            document.addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (
+                        event.key === "f" ||
+                        event.key === "F"
+                    ) {
+
+                        enterFullscreen();
+
+                    }
+
+                }
+            );
+
+
+            // ------------------------------------------------------------
+            // Start player
+            // ------------------------------------------------------------
+
+            initializePlayer();
+
+
+        </script>
+
+
+    </body>
+
+    </html>

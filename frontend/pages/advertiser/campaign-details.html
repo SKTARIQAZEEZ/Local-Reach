@@ -1,0 +1,2349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campaign Details - LocalReach</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 240px;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-left: 15px;
+        }
+
+        .nav a {
+            display: block;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 13px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
+
+        .nav a:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+        }
+
+        .user {
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* CAMPAIGN HEADER */
+
+        .campaign-header {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .campaign-header h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .campaign-header p {
+            color: #6b7280;
+        }
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .status.draft {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.paused {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .status.completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* CARDS */
+
+        .details-card,
+        .screens-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .details-card h3,
+        .screens-card h3 {
+            margin-bottom: 25px;
+            font-size: 21px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .detail-item {
+            background: #f7f9fc;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .detail-item strong {
+            display: block;
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .detail-item span {
+            font-size: 17px;
+            font-weight: 500;
+        }
+
+        /* SCREENS */
+
+        .screen-item {
+            background: #f7f9fc;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 15px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .screen-info strong {
+            display: block;
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+
+        .screen-info span {
+            display: block;
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .remove-screen-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .remove-screen-btn:hover {
+            background: #b91c1c;
+        }
+
+        .assign-screen-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .assign-screen-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .no-screens,
+        .no-available {
+            color: #6b7280;
+            background: #f7f9fc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                padding: 20px;
+            }
+
+            .campaign-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .screen-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* ============================================================
+   PAYMENT
+============================================================ */
+
+.payment-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.payment-card h3 {
+    margin-bottom: 15px;
+    font-size: 21px;
+}
+
+.payment-box {
+    background: #f7f9fc;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.payment-amount {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.payment-btn {
+    background: #16a34a;
+    color: white;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.payment-btn:hover {
+    background: #15803d;
+}
+
+.payment-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.payment-success {
+    color: #166534;
+    font-weight: bold;
+}
+
+.payment-muted {
+    color: #6b7280;
+}
+    </style>
+
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+
+        <!-- =========================================
+     ADVERTISER NAVIGATION
+========================================= -->
+
+<aside class="lr-sidebar">
+
+    <div class="lr-logo">
+        LocalReach
+    </div>
+
+    <a href="dashboard.html" class="lr-nav-link">
+        🏠 Dashboard
+    </a>
+
+    <a href="business.html" class="lr-nav-link">
+        🏢 Business
+    </a>
+
+    <a href="advertisements.html" class="lr-nav-link">
+        📢 Advertisements
+    </a>
+
+    <a href="campaigns.html" class="lr-nav-link">
+        📋 Campaigns
+    </a>
+
+    <a href="create-campaign.html" class="lr-nav-link">
+        ➕ Create Campaign
+    </a>
+
+    <a href="screens.html" class="lr-nav-link">
+        🖥️ Screens
+    </a>
+
+    <a href="analytics.html" class="lr-nav-link">
+        📊 Analytics
+    </a>
+
+    <a href="../notifications.html" class="lr-nav-link">
+        🔔 Notifications
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH ADVERTISER NAVIGATION
+    ========================================= */
+
+    .lr-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-nav-link.lr-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+       The correct option stays highlighted
+       on every advertiser page.
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(".lr-nav-link")
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+
+        <!-- MAIN -->
+
+        <main class="main">
+
+            <div class="topbar">
+
+                <h1>
+                    Campaign Details
+                </h1>
+
+                <div class="user">
+                    Welcome,
+                    <span id="userName">
+                        User
+                    </span>
+                </div>
+
+            </div>
+
+
+            <a href="campaigns.html" class="back-link">
+                ← Back to Campaigns
+            </a>
+
+
+            <div id="errorMessage"></div>
+
+
+            <!-- CAMPAIGN HEADER -->
+
+            <section class="campaign-header">
+
+                <div>
+
+                    <h2 id="campaignName">
+                        Loading...
+                    </h2>
+
+                    <p id="advertisementTitle">
+                        Loading advertisement...
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <span
+                        id="campaignStatus"
+                        class="status draft">
+
+                        Loading...
+
+                    </span>
+
+
+                    <div style="margin-top:15px;">
+
+                        <button
+                            id="editButton"
+                            onclick="editCampaign()"
+                            style="
+                                padding:10px 18px;
+                                border:none;
+                                border-radius:8px;
+                                background:#2563eb;
+                                color:white;
+                                font-size:14px;
+                                font-weight:bold;
+                                cursor:pointer;
+                            ">
+
+                            ✏️ Edit Campaign
+
+                        </button>
+
+
+                        <button
+                            id="deleteButton"
+                            onclick="deleteCampaign()"
+                            style="
+                                margin-left:10px;
+                                padding:10px 18px;
+                                border:none;
+                                border-radius:8px;
+                                background:#dc2626;
+                                color:white;
+                                font-size:14px;
+                                font-weight:bold;
+                                cursor:pointer;
+                            ">
+
+                            🗑️ Delete Campaign
+
+                        </button>
+
+
+                        <button
+                            id="statusButton"
+                            onclick="toggleCampaignStatus()"
+                            style="
+                                margin-left:10px;
+                                padding:10px 18px;
+                                border:none;
+                                border-radius:8px;
+                                background:#16a34a;
+                                color:white;
+                                font-size:14px;
+                                font-weight:bold;
+                                cursor:pointer;
+                            ">
+
+                            Submit for Approval
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- CAMPAIGN DETAILS -->
+
+            <section class="details-card">
+
+                <h3>
+                    Campaign Information
+                </h3>
+
+
+                <div class="details-grid">
+
+
+                    <div class="detail-item">
+
+                        <strong>
+                            Start Date
+                        </strong>
+
+                        <span id="startDate">
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <strong>
+                            End Date
+                        </strong>
+
+                        <span id="endDate">
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <strong>
+                            Budget
+                        </strong>
+
+                        <span id="budget">
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <strong>
+                            Target City
+                        </strong>
+
+                        <span id="targetCity">
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <strong>
+                            Target Area
+                        </strong>
+
+                        <span id="targetArea">
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <strong>
+                            Target Radius
+                        </strong>
+
+                        <span id="radius">
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <strong>
+                            Advertisement Duration
+                        </strong>
+
+                        <span id="duration">
+                            -
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <strong>
+                            Advertisement Status
+                        </strong>
+
+                        <span id="advertisementStatus">
+                            -
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+            <!-- CAMPAIGN PAYMENT -->
+
+<section class="payment-card">
+
+    <h3>
+        Campaign Payment
+    </h3>
+
+    <div
+        id="paymentStatus"
+        class="payment-box"
+    >
+        <div class="loading">
+            Checking payment status...
+        </div>
+    </div>
+
+</section>
+
+
+            <!-- ASSIGNED SCREENS -->
+
+            <section class="screens-card">
+
+                <h3>
+                    Assigned Screens
+                </h3>
+
+                <div id="assignedScreens">
+
+                    <div class="loading">
+                        Loading screens...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- AVAILABLE SCREENS -->
+
+            <section class="screens-card">
+
+                <h3>
+                    Available Screens
+                </h3>
+
+                <div class="info-box">
+
+                    Available screens are based on your campaign dates
+                    and target location.
+
+                </div>
+
+                <div id="availableScreens">
+
+                    <div class="loading">
+                        Loading available screens...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+    <script>
+
+    /* ==========================================
+       USER
+    ========================================== */
+
+    const userData = localStorage.getItem("user");
+
+    let user = null;
+
+    try {
+        user = userData ? JSON.parse(userData) : null;
+    } catch (error) {
+        user = null;
+    }
+
+    if (user) {
+        document.getElementById("userName").textContent =
+            user.full_name || "User";
+    }
+
+
+    /* ==========================================
+       AUTH
+    ========================================== */
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        window.location.href = "../login.html";
+    }
+
+
+    /* ==========================================
+       LOGOUT
+    ========================================== */
+
+    function logout() {
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        window.location.href = "../login.html";
+    }
+
+
+    /* ==========================================
+       CAMPAIGN ID
+    ========================================== */
+
+    const urlParams =
+        new URLSearchParams(window.location.search);
+
+    const campaignId =
+        urlParams.get("id");
+
+
+    /* ==========================================
+       DATE FORMAT
+    ========================================== */
+
+    function formatDate(dateString) {
+
+        if (!dateString) {
+            return "-";
+        }
+
+        const date = new Date(dateString);
+
+        if (isNaN(date.getTime())) {
+            return "-";
+        }
+
+        return date.toLocaleDateString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+    }
+
+
+    /* ==========================================
+       EDIT CAMPAIGN
+    ========================================== */
+
+    function editCampaign() {
+
+        window.location.href =
+            `edit-campaign.html?id=${campaignId}`;
+    }
+
+
+    /* ==========================================
+       DELETE CAMPAIGN
+    ========================================== */
+
+    async function deleteCampaign() {
+
+        const confirmed = confirm(
+            "Are you sure you want to delete this campaign?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                `http://localhost:5000/api/campaigns/${campaignId}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message ||
+                    "Failed to delete campaign"
+                );
+            }
+
+            alert(
+                "Campaign deleted successfully!"
+            );
+
+            window.location.href =
+                "campaigns.html";
+
+        } catch (error) {
+
+            console.error(
+                "Delete campaign error:",
+                error
+            );
+
+            alert(error.message);
+        }
+    }
+
+
+    /* ==========================================
+       CAMPAIGN STATUS
+    ========================================== */
+
+    async function toggleCampaignStatus() {
+
+        const statusElement =
+            document.getElementById("campaignStatus");
+
+        const currentStatus =
+            statusElement.textContent
+                .trim()
+                .toLowerCase();
+
+        let newStatus = null;
+
+
+        /*
+            Advertiser can:
+
+            active  -> paused
+            draft   -> pending
+            paused  -> pending
+
+            Advertiser CANNOT:
+
+            draft   -> active
+            paused  -> active
+        */
+
+
+        if (currentStatus === "active") {
+
+            newStatus = "paused";
+
+        } else if (
+            currentStatus === "draft" ||
+            currentStatus === "paused"
+        ) {
+
+            newStatus = "pending";
+
+        } else {
+
+            return;
+        }
+
+
+        if (
+            newStatus === "pending" &&
+            currentStatus === "paused"
+        ) {
+
+            const confirmed = confirm(
+                "Submitting this campaign again will require admin approval. Continue?"
+            );
+
+            if (!confirmed) {
+                return;
+            }
+        }
+
+
+        try {
+
+            const response = await fetch(
+                `http://localhost:5000/api/campaigns/${campaignId}/status`,
+                {
+                    method: "PATCH",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify({
+                        status: newStatus
+                    })
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to update campaign status"
+                );
+            }
+
+
+            alert(
+                data.message ||
+                "Campaign status updated"
+            );
+
+
+            await loadCampaign();
+            await loadAssignedScreens();
+            await loadAvailableScreens();
+
+        } catch (error) {
+
+            console.error(
+                "Campaign status error:",
+                error
+            );
+
+            alert(error.message);
+        }
+    }
+
+
+    /* ==========================================
+       LOAD CAMPAIGN
+    ========================================== */
+
+    async function loadCampaign() {
+
+        if (!token) {
+            return;
+        }
+
+
+        if (!campaignId) {
+
+            document.getElementById(
+                "errorMessage"
+            ).innerHTML = `
+                <div class="error">
+                    Campaign ID is missing.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                `http://localhost:5000/api/campaigns/${campaignId}`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                document.getElementById(
+                    "errorMessage"
+                ).innerHTML = `
+                    <div class="error">
+                        ${data.message ||
+                        "Failed to load campaign"}
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            const campaign =
+                data.campaign;
+
+
+            console.log(
+                "Campaign details:",
+                campaign
+            );
+
+
+            /* ==========================================
+               CAMPAIGN NAME
+            ========================================== */
+
+            document.getElementById(
+                "campaignName"
+            ).textContent =
+                campaign.name || "-";
+
+
+            /* ==========================================
+               ADVERTISEMENT TITLE
+            ========================================== */
+
+            document.getElementById(
+                "advertisementTitle"
+            ).textContent =
+                campaign.advertisement_title ||
+                "Advertisement";
+
+
+            /* ==========================================
+               CAMPAIGN STATUS
+            ========================================== */
+
+            const statusElement =
+                document.getElementById(
+                    "campaignStatus"
+                );
+
+            const campaignStatus =
+                campaign.status || "draft";
+
+
+            statusElement.textContent =
+                campaignStatus;
+
+
+            statusElement.className =
+                `status ${campaignStatus}`;
+
+
+            /* ==========================================
+               STATUS BUTTON
+            ========================================== */
+
+            const statusButton =
+                document.getElementById(
+                    "statusButton"
+                );
+
+
+            statusButton.disabled = false;
+            statusButton.style.cursor = "pointer";
+            statusButton.style.display = "inline-block";
+
+
+            if (campaignStatus === "active") {
+
+                statusButton.textContent =
+                    "⏸️ Pause Campaign";
+
+                statusButton.style.background =
+                    "#dc2626";
+
+            } else if (
+                campaignStatus === "paused"
+            ) {
+
+                statusButton.textContent =
+                    "📤 Submit for Approval";
+
+                statusButton.style.background =
+                    "#2563eb";
+
+            } else if (
+                campaignStatus === "draft"
+            ) {
+
+                statusButton.textContent =
+                    "📤 Submit for Approval";
+
+                statusButton.style.background =
+                    "#2563eb";
+
+            } else if (
+                campaignStatus === "pending"
+            ) {
+
+                statusButton.textContent =
+                    "⏳ Waiting for Admin Approval";
+
+                statusButton.style.background =
+                    "#d97706";
+
+                statusButton.disabled = true;
+                statusButton.style.cursor =
+                    "not-allowed";
+
+            } else if (
+                campaignStatus === "rejected"
+            ) {
+
+                statusButton.textContent =
+                    "❌ Campaign Rejected";
+
+                statusButton.style.background =
+                    "#991b1b";
+
+                statusButton.disabled = true;
+                statusButton.style.cursor =
+                    "not-allowed";
+
+            } else if (
+                campaignStatus === "completed"
+            ) {
+
+                statusButton.textContent =
+                    "✅ Campaign Completed";
+
+                statusButton.style.background =
+                    "#1e40af";
+
+                statusButton.disabled = true;
+                statusButton.style.cursor =
+                    "not-allowed";
+
+            } else {
+
+                statusButton.style.display =
+                    "none";
+            }
+
+
+            /* ==========================================
+               START DATE
+            ========================================== */
+
+            document.getElementById(
+                "startDate"
+            ).textContent =
+                formatDate(
+                    campaign.start_date
+                );
+
+
+            /* ==========================================
+               END DATE
+            ========================================== */
+
+            document.getElementById(
+                "endDate"
+            ).textContent =
+                formatDate(
+                    campaign.end_date
+                );
+
+
+            /* ==========================================
+               BUDGET
+            ========================================== */
+
+            document.getElementById(
+                "budget"
+            ).textContent =
+                `₹${Number(
+                    campaign.budget || 0
+                ).toFixed(2)}`;
+
+
+            /* ==========================================
+               TARGET CITY
+            ========================================== */
+
+            document.getElementById(
+                "targetCity"
+            ).textContent =
+                campaign.target_city ||
+                "-";
+
+
+            /* ==========================================
+               TARGET AREA
+            ========================================== */
+
+            document.getElementById(
+                "targetArea"
+            ).textContent =
+                campaign.target_area ||
+                "-";
+
+
+            /* ==========================================
+               TARGET RADIUS
+            ========================================== */
+
+            document.getElementById(
+                "radius"
+            ).textContent =
+                campaign.radius_km
+                    ? `${campaign.radius_km} km`
+                    : "Not specified";
+
+
+            /* ==========================================
+               ADVERTISEMENT DURATION
+
+               IMPORTANT:
+               Backend returns:
+               advertisement_duration_seconds
+            ========================================== */
+
+            const advertisementDuration =
+                campaign.advertisement_duration_seconds ||
+                campaign.duration_seconds;
+
+
+            document.getElementById(
+                "duration"
+            ).textContent =
+                advertisementDuration
+                    ? `${advertisementDuration} seconds`
+                    : "-";
+
+
+            /* ==========================================
+               ADVERTISEMENT STATUS
+            ========================================== */
+
+            document.getElementById(
+                "advertisementStatus"
+            ).textContent =
+                campaign.advertisement_status ||
+                "-";
+
+
+            /* ==========================================
+               EDIT BUTTON
+            ========================================== */
+
+            const editButton =
+                document.getElementById(
+                    "editButton"
+                );
+
+
+            if (
+                campaignStatus === "completed" ||
+                campaignStatus === "rejected"
+            ) {
+
+                editButton.style.display =
+                    "none";
+
+            } else {
+
+                editButton.style.display =
+                    "inline-block";
+            }
+
+
+            /* ==========================================
+               DELETE BUTTON
+            ========================================== */
+
+            const deleteButton =
+                document.getElementById(
+                    "deleteButton"
+                );
+
+
+            if (
+                campaignStatus === "completed"
+            ) {
+
+                deleteButton.style.display =
+                    "none";
+
+            } else {
+
+                deleteButton.style.display =
+                    "inline-block";
+            }
+
+
+            /* ==========================================
+               PAYMENT
+            ========================================== */
+
+            await loadPaymentStatus(
+                campaign
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Campaign details error:",
+                error
+            );
+
+
+            document.getElementById(
+                "errorMessage"
+            ).innerHTML = `
+                <div class="error">
+                    Unable to connect to server.
+                    <br><br>
+                    ${error.message}
+                </div>
+            `;
+        }
+    }
+
+
+    /* ==========================================
+       LOAD PAYMENT STATUS
+    ========================================== */
+
+    async function loadPaymentStatus(
+        campaign
+    ) {
+
+        const container =
+            document.getElementById(
+                "paymentStatus"
+            );
+
+
+        if (!container) {
+
+            console.error(
+                "paymentStatus element not found"
+            );
+
+            return;
+        }
+
+
+        /*
+            Payment is only available
+            after campaign approval.
+        */
+
+        if (
+            campaign.status !== "active"
+        ) {
+
+            let message =
+                "Payment will be available after the campaign is approved by admin.";
+
+
+            if (
+                campaign.status === "pending"
+            ) {
+
+                message =
+                    "Payment will be available after admin approves this campaign.";
+
+            } else if (
+                campaign.status === "draft"
+            ) {
+
+                message =
+                    "Submit the campaign for admin approval before payment.";
+
+            } else if (
+                campaign.status === "paused"
+            ) {
+
+                message =
+                    "Payment is unavailable while the campaign is paused.";
+
+            } else if (
+                campaign.status === "rejected"
+            ) {
+
+                message =
+                    "Payment is unavailable because this campaign was rejected.";
+
+            } else if (
+                campaign.status === "completed"
+            ) {
+
+                message =
+                    "This campaign has already been completed.";
+            }
+
+
+            container.innerHTML = `
+                <div class="payment-muted">
+                    ${message}
+                </div>
+            `;
+
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:5000/api/payments",
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to check payment status"
+                );
+            }
+
+
+            const payments =
+                data.payments || [];
+
+
+            const paidPayment =
+                payments.find(
+                    payment =>
+                        String(
+                            payment.campaign_id || ""
+                        ) ===
+                        String(campaign.id) &&
+                        String(
+                            payment.status || ""
+                        ).toLowerCase() ===
+                        "paid"
+                );
+
+
+            /* ==========================================
+               ALREADY PAID
+            ========================================== */
+
+            if (paidPayment) {
+
+                container.innerHTML = `
+                    <div class="payment-box">
+
+                        <div class="payment-success">
+                            ✅ Payment Completed
+                        </div>
+
+                        <div style="margin-top:10px;">
+                            Amount Paid:
+                            <strong>
+                                ₹${Number(
+                                    paidPayment.amount || 0
+                                ).toFixed(2)}
+                            </strong>
+                        </div>
+
+                        <div
+                            class="payment-muted"
+                            style="margin-top:8px;"
+                        >
+                            Payment Date:
+                            ${formatDate(
+                                paidPayment.created_at
+                            )}
+                        </div>
+
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            /* ==========================================
+               ACTIVE + UNPAID
+            ========================================== */
+
+            container.innerHTML = `
+
+                <div class="payment-box">
+
+                    <div class="payment-amount">
+                        ₹${Number(
+                            campaign.budget || 0
+                        ).toFixed(2)}
+                    </div>
+
+                    <p
+                        style="
+                            margin-bottom:15px;
+                            color:#6b7280;
+                        "
+                    >
+                        Your campaign has been approved.
+                        Complete the demo payment to
+                        continue with campaign delivery.
+                    </p>
+
+                    <button
+    id="payButton"
+    class="payment-btn"
+    onclick='payForCampaign(${JSON.stringify(campaign.id)}, ${Number(campaign.budget || 0)})'
+>
+    💳 Pay for Campaign
+</button>
+
+                </div>
+            `;
+
+        } catch (error) {
+
+            console.error(
+                "Payment status error:",
+                error
+            );
+
+
+            container.innerHTML = `
+                <div class="error">
+                    Unable to check payment status.
+                    <br><br>
+                    ${error.message}
+                </div>
+            `;
+        }
+    }
+
+
+    /* ==========================================
+       PAY FOR CAMPAIGN
+    ========================================== */
+
+    async function payForCampaign(
+        campaignIdToPay,
+        amount
+    ) {
+
+        const confirmed =
+            confirm(
+                `Confirm demo payment of ₹${Number(
+                    amount
+                ).toFixed(2)} for this campaign?`
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        const button =
+            document.getElementById(
+                "payButton"
+            );
+
+
+        if (button) {
+
+            button.disabled = true;
+
+            button.textContent =
+                "Processing Payment...";
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:5000/api/payments",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+
+                            campaignId:
+                                campaignIdToPay,
+
+                            amount:
+                                Number(amount)
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Payment failed"
+                );
+            }
+
+
+            alert(
+                data.message ||
+                "Demo payment successful"
+            );
+
+
+            /*
+                Reload actual payment status
+            */
+
+            await loadCampaign();
+
+        } catch (error) {
+
+            console.error(
+                "Payment error:",
+                error
+            );
+
+
+            alert(
+                error.message
+            );
+
+
+            if (button) {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "💳 Pay for Campaign";
+            }
+        }
+    }
+
+
+    /* ==========================================
+       LOAD ASSIGNED SCREENS
+    ========================================== */
+
+    async function loadAssignedScreens() {
+
+        const container =
+            document.getElementById(
+                "assignedScreens"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `http://localhost:5000/api/campaigns/${campaignId}`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to load assigned screens"
+                );
+            }
+
+
+            const campaign =
+                data.campaign;
+
+
+            const screens =
+                campaign.screens || [];
+
+
+            if (screens.length === 0) {
+
+                container.innerHTML = `
+                    <div class="no-screens">
+                        No screens are currently assigned
+                        to this campaign.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            container.innerHTML = "";
+
+
+            screens.forEach(
+                function(screen) {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    item.className =
+                        "screen-item";
+
+
+                    item.innerHTML = `
+
+                        <div class="screen-info">
+
+                            <strong>
+                                ${
+                                    screen.name ||
+                                    screen.screen_name ||
+                                    "Unnamed Screen"
+                                }
+                            </strong>
+
+                            <span>
+                                📍 ${
+                                    screen.area || "-"
+                                },
+                                ${
+                                    screen.city || "-"
+                                }
+                            </span>
+
+                            <span>
+                                💰 ₹${
+                                    Number(
+                                        screen.price_per_week || 0
+                                    ).toFixed(2)
+                                } / week
+                            </span>
+
+                            <span>
+                                Status:
+                                ${
+                                    screen.status || "-"
+                                }
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            class="remove-screen-btn"
+                            onclick="removeScreen(
+                                '${screen.id}'
+                            )"
+                        >
+                            🗑️ Remove Screen
+                        </button>
+
+                    `;
+
+
+                    container.appendChild(item);
+                }
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Assigned screens error:",
+                error
+            );
+
+
+            container.innerHTML = `
+                <div class="error">
+                    ${error.message}
+                </div>
+            `;
+        }
+    }
+
+
+    /* ==========================================
+       LOAD AVAILABLE SCREENS
+    ========================================== */
+
+    async function loadAvailableScreens() {
+
+        const container =
+            document.getElementById(
+                "availableScreens"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `http://localhost:5000/api/campaigns/${campaignId}/available-screens`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to load available screens"
+                );
+            }
+
+
+            const screens =
+                data.screens || [];
+
+
+            if (screens.length === 0) {
+
+                container.innerHTML = `
+                    <div class="no-available">
+                        No screens are currently available
+                        for this campaign's dates and location.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            container.innerHTML = "";
+
+
+            screens.forEach(
+                function(screen) {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    item.className =
+                        "screen-item";
+
+
+                    item.innerHTML = `
+
+                        <div class="screen-info">
+
+                            <strong>
+                                ${
+                                    screen.name ||
+                                    screen.screen_name ||
+                                    "Unnamed Screen"
+                                }
+                            </strong>
+
+                            <span>
+                                📍 ${
+                                    screen.area || "-"
+                                },
+                                ${
+                                    screen.city || "-"
+                                }
+                            </span>
+
+                            <span>
+                                💰 ₹${
+                                    Number(
+                                        screen.price_per_week || 0
+                                    ).toFixed(2)
+                                } / week
+                            </span>
+
+                            <span>
+                                ▶️ Estimated daily plays:
+                                ${
+                                    screen.estimated_daily_plays ||
+                                    0
+                                }
+                            </span>
+
+                            <span>
+                                Status:
+                                ${
+                                    screen.status || "-"
+                                }
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            class="assign-screen-btn"
+                            onclick="assignScreen(
+                                '${screen.id}'
+                            )"
+                        >
+                            ➕ Assign Screen
+                        </button>
+
+                    `;
+
+
+                    container.appendChild(item);
+                }
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Available screens error:",
+                error
+            );
+
+
+            container.innerHTML = `
+                <div class="error">
+                    ${error.message}
+                </div>
+            `;
+        }
+    }
+
+
+    /* ==========================================
+       ASSIGN SCREEN
+    ========================================== */
+
+    async function assignScreen(
+        screenId
+    ) {
+
+        const confirmed =
+            confirm(
+                "Do you want to assign this screen to the campaign?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `http://localhost:5000/api/campaigns/${campaignId}/screens`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+                            screenId:
+                                screenId
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to assign screen"
+                );
+            }
+
+
+            alert(
+                data.message ||
+                "Screen assigned successfully!"
+            );
+
+
+            await loadCampaign();
+            await loadAssignedScreens();
+            await loadAvailableScreens();
+
+        } catch (error) {
+
+            console.error(
+                "Assign screen error:",
+                error
+            );
+
+
+            alert(
+                error.message
+            );
+        }
+    }
+
+
+    /* ==========================================
+       REMOVE SCREEN
+    ========================================== */
+
+    async function removeScreen(
+        screenId
+    ) {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to remove this screen from the campaign?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `http://localhost:5000/api/campaigns/${campaignId}/screens/${screenId}`,
+                    {
+                        method: "DELETE",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to remove screen"
+                );
+            }
+
+
+            alert(
+                data.message ||
+                "Screen removed from campaign successfully!"
+            );
+
+
+            await loadCampaign();
+            await loadAssignedScreens();
+            await loadAvailableScreens();
+
+        } catch (error) {
+
+            console.error(
+                "Remove screen error:",
+                error
+            );
+
+
+            alert(
+                error.message
+            );
+        }
+    }
+
+
+    /* ==========================================
+       INITIAL LOAD
+    ========================================== */
+
+    if (campaignId) {
+
+        loadCampaign();
+
+        loadAssignedScreens();
+
+        loadAvailableScreens();
+    }
+
+</script>
+
+</body>
+
+</html>

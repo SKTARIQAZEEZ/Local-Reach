@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Screen Network - LocalReach</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #17213d;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 285px;
+            background: #192957;
+            color: white;
+            padding: 28px 14px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+            padding: 0 12px 35px;
+        }
+
+        .logo span {
+            color: #2874f0;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: white;
+            padding: 16px 20px;
+            border-radius: 10px;
+            font-size: 17px;
+            display: block;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: #2867e8;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 14px;
+            right: 14px;
+            padding: 14px;
+            border: 1px solid #52618a;
+            border-radius: 9px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 285px;
+            width: calc(100% - 285px);
+            padding: 42px 36px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #667085;
+            font-size: 17px;
+        }
+
+        .user {
+            background: white;
+            padding: 14px 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        /* SCREEN GRID */
+
+        .screen-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(320px, 1fr));
+
+            gap: 22px;
+        }
+
+        .screen-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow:
+                0 3px 15px rgba(0, 0, 0, 0.05);
+
+            border: 1px solid #edf0f5;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .screen-header h2 {
+            font-size: 21px;
+            margin-bottom: 6px;
+        }
+
+        .screen-id {
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .online {
+            background: #e7f8ee;
+            color: #15803d;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .screen-info {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .info-label {
+            color: #667085;
+        }
+
+        .info-value {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .price {
+            font-size: 22px;
+            color: #17213d;
+        }
+
+        .select-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 9px;
+            background: #2867e8;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .select-btn:hover {
+            background: #1d56c7;
+        }
+
+        .empty {
+            background: white;
+            border-radius: 16px;
+            padding: 45px;
+            text-align: center;
+            color: #667085;
+        }
+
+        .error {
+            color: #d92d20;
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="layout">
+
+   <!-- =========================================
+     ADVERTISER NAVIGATION
+========================================= -->
+
+<aside class="lr-sidebar">
+
+    <div class="lr-logo">
+        LocalReach
+    </div>
+
+    <a href="dashboard.html" class="lr-nav-link">
+        🏠 Dashboard
+    </a>
+
+    <a href="business.html" class="lr-nav-link">
+        🏢 Business
+    </a>
+
+    <a href="advertisements.html" class="lr-nav-link">
+        📢 Advertisements
+    </a>
+
+    <a href="campaigns.html" class="lr-nav-link">
+        📋 Campaigns
+    </a>
+
+    <a href="create-campaign.html" class="lr-nav-link">
+        ➕ Create Campaign
+    </a>
+
+    <a href="screens.html" class="lr-nav-link">
+        🖥️ Screens
+    </a>
+
+    <a href="analytics.html" class="lr-nav-link">
+        📊 Analytics
+    </a>
+
+    <a href="../notifications.html" class="lr-nav-link">
+        🔔 Notifications
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH ADVERTISER NAVIGATION
+    ========================================= */
+
+    .lr-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-nav-link.lr-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+       The correct option stays highlighted
+       on every advertiser page.
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(".lr-nav-link")
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="header">
+
+            <div>
+
+                <h1>Screen Network</h1>
+
+                <p>
+                    Browse available screens for your campaigns.
+                </p>
+
+            </div>
+
+            <div class="user">
+
+                👤
+                <span id="userName">
+                    Advertiser
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="screenGrid"
+            class="screen-grid"
+        >
+
+            <div class="empty">
+                Loading available screens...
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const token =
+        localStorage.getItem("token");
+
+
+    // ========================================================
+    // LOGIN CHECK
+    // ========================================================
+
+    if (!token) {
+
+        window.location.href =
+            "../login.html";
+
+    }
+
+
+    // ========================================================
+    // USER NAME
+    // ========================================================
+
+    const storedUser =
+        localStorage.getItem("user");
+
+    if (storedUser) {
+
+        try {
+
+            const user =
+                JSON.parse(storedUser);
+
+            document.getElementById(
+                "userName"
+            ).textContent =
+                user.full_name || "Advertiser";
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+
+    // ========================================================
+    // LOAD SCREENS
+    // ========================================================
+
+    async function loadScreens() {
+
+        const container =
+            document.getElementById(
+                "screenGrid"
+            );
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:5000/api/screens",
+                    {
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to load screens"
+                );
+
+            }
+
+
+            const screens =
+                data.screens || [];
+
+
+            if (screens.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty">
+                        <h2>No screens available</h2>
+
+                        <p style="margin-top:10px;">
+                            Screen owners have not added
+                            any online screens yet.
+                        </p>
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                screens.map(screen => {
+
+                    return `
+
+                        <div class="screen-card">
+
+                            <div class="screen-header">
+
+                                <div>
+
+                                    <h2>
+                                        ${escapeHtml(
+                                            screen.screen_name
+                                        )}
+                                    </h2>
+
+                                    <div class="screen-id">
+                                        ID:
+                                        ${escapeHtml(
+                                            screen.screen_id
+                                        )}
+                                    </div>
+
+                                </div>
+
+                                <span class="online">
+                                    Online
+                                </span>
+
+                            </div>
+
+
+                            <div class="screen-info">
+
+                                <div class="info-row">
+
+                                    <span class="info-label">
+                                        Business
+                                    </span>
+
+                                    <span class="info-value">
+                                        ${escapeHtml(
+                                            screen.business_name
+                                        )}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="info-row">
+
+                                    <span class="info-label">
+                                        Category
+                                    </span>
+
+                                    <span class="info-value">
+                                        ${escapeHtml(
+                                            screen.business_category
+                                        )}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="info-row">
+
+                                    <span class="info-label">
+                                        Location
+                                    </span>
+
+                                    <span class="info-value">
+                                        ${escapeHtml(
+                                            screen.area
+                                        )},
+                                        ${escapeHtml(
+                                            screen.city
+                                        )}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="info-row">
+
+                                    <span class="info-label">
+                                        Screen
+                                    </span>
+
+                                    <span class="info-value">
+                                        ${escapeHtml(
+                                            screen.screen_type
+                                        )}
+                                        /
+                                        ${escapeHtml(
+                                            screen.screen_size
+                                        )}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="info-row">
+
+                                    <span class="info-label">
+                                        Estimated Plays
+                                    </span>
+
+                                    <span class="info-value">
+                                        ${Number(
+                                            screen.estimated_daily_plays || 0
+                                        ).toLocaleString("en-IN")}
+                                        / day
+                                    </span>
+
+                                </div>
+
+
+                                <div class="info-row">
+
+                                    <span class="info-label">
+                                        Weekly Price
+                                    </span>
+
+                                    <span class="info-value price">
+                                        ₹${Number(
+                                            screen.price_per_week || 0
+                                        ).toLocaleString("en-IN")}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="select-btn"
+                                onclick="selectScreen('${screen.id}')"
+                            >
+                                Select Screen
+                            </button>
+
+                        </div>
+
+                    `;
+
+                }).join("");
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            container.innerHTML = `
+                <div class="empty error">
+                    Failed to load screens.
+                </div>
+            `;
+
+        }
+
+    }
+
+
+    // ========================================================
+    // SELECT SCREEN
+    // ========================================================
+
+    function selectScreen(screenId) {
+
+        localStorage.setItem(
+            "selectedScreenId",
+            screenId
+        );
+
+        alert(
+            "Screen selected. We will connect it to a campaign next."
+        );
+
+    }
+
+
+    // ========================================================
+    // ESCAPE HTML
+    // ========================================================
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value ?? "";
+
+        return div.innerHTML;
+
+    }
+
+
+    // ========================================================
+    // LOGOUT
+    // ========================================================
+
+    function logout() {
+
+        localStorage.removeItem("token");
+
+        localStorage.removeItem("user");
+
+        window.location.href =
+            "../login.html";
+
+    }
+
+
+    // ========================================================
+    // INITIAL LOAD
+    // ========================================================
+
+    loadScreens();
+
+</script>
+<script>
+document.addEventListener("click", async function (event) {
+
+    const button = event.target.closest("button, a");
+
+    if (!button) return;
+
+    if (button.textContent.trim() !== "Select Screen") return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const screenCard = button.closest(".screen-card, .card, div");
+
+    // Find screen ID from the visible card
+    let screenId = null;
+
+    const cardText = screenCard ? screenCard.innerText : "";
+
+    const idMatch = cardText.match(/ID:\s*([A-Za-z0-9-]+)/);
+
+    if (!idMatch) {
+        alert("Could not find screen ID.");
+        return;
+    }
+
+    const screenCode = idMatch[1];
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("Please login first.");
+        return;
+    }
+
+    try {
+
+        // Load available campaigns
+        const campaignResponse = await fetch(
+            "http://localhost:5000/api/campaigns",
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+        const campaignData = await campaignResponse.json();
+
+        if (!campaignResponse.ok) {
+            alert(campaignData.message || "Failed to load campaigns.");
+            return;
+        }
+
+        const campaigns = campaignData.campaigns || [];
+
+        if (campaigns.length === 0) {
+            alert("Please create a campaign first.");
+            return;
+        }
+
+        // Show campaigns
+        let message = "Select a campaign:\n\n";
+
+        campaigns.forEach((campaign, index) => {
+            message += `${index + 1}. ${campaign.name} (${campaign.status})\n`;
+        });
+
+        const choice = prompt(message);
+
+        if (!choice) return;
+
+        const index = Number(choice) - 1;
+
+        if (
+            !Number.isInteger(index) ||
+            index < 0 ||
+            index >= campaigns.length
+        ) {
+            alert("Invalid campaign selection.");
+            return;
+        }
+
+        const selectedCampaign = campaigns[index];
+
+        // Get the real UUID of the screen
+        const screenResponse = await fetch(
+            "http://localhost:5000/api/screens",
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        );
+
+        const screenData = await screenResponse.json();
+
+        if (!screenResponse.ok) {
+            alert(screenData.message || "Failed to load screen.");
+            return;
+        }
+
+        const screens = screenData.screens || [];
+
+        const selectedScreen = screens.find(
+            screen => screen.screen_id === screenCode
+        );
+
+        if (!selectedScreen) {
+            alert("Screen could not be found.");
+            return;
+        }
+
+        // Connect screen to campaign
+        const response = await fetch(
+            `http://localhost:5000/api/campaigns/${selectedCampaign.id}/screens`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    screenId: selectedScreen.id
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Failed to connect screen.");
+            return;
+        }
+
+        alert(
+            `Screen connected successfully!\n\n` +
+            `Campaign: ${selectedCampaign.name}\n` +
+            `Screen: ${screenCode}`
+        );
+
+    } catch (error) {
+
+        console.error("Screen connection error:", error);
+
+        alert("Server error while connecting screen.");
+
+    }
+
+}, true);
+</script>
+</body>
+
+</html>

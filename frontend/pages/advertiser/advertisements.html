@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Advertisements - LocalReach</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #17213d;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 285px;
+            background: #192957;
+            color: white;
+            padding: 28px 14px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+            padding: 0 12px 35px;
+        }
+
+        .logo span {
+            color: #2874f0;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: white;
+            padding: 16px 20px;
+            border-radius: 10px;
+            font-size: 17px;
+            display: block;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: #2867e8;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 14px;
+            right: 14px;
+            padding: 14px;
+            border: 1px solid #52618a;
+            border-radius: 9px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 285px;
+            width: calc(100% - 285px);
+            padding: 42px 36px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #667085;
+            font-size: 17px;
+        }
+
+        .user {
+            background: white;
+            padding: 14px 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h2 {
+            margin-bottom: 22px;
+            font-size: 23px;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input {
+            padding: 13px;
+            border: 1px solid #d5d9e2;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2867e8;
+        }
+
+        .file-input {
+            padding: 10px;
+            background: #f8f9fc;
+        }
+
+        .upload-btn {
+            margin-top: 22px;
+            padding: 14px 25px;
+            background: #2867e8;
+            border: none;
+            border-radius: 9px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .upload-btn:hover {
+            background: #1d56c7;
+        }
+
+        .upload-btn:disabled {
+            background: #9aa4b5;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #159447;
+        }
+
+        .error {
+            color: #d92d20;
+        }
+
+        /* ADVERTISEMENT LIST */
+
+        .ad-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ad-item {
+            border: 1px solid #e1e5ed;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .ad-info h3 {
+            margin-bottom: 8px;
+        }
+
+        .ad-info p {
+            color: #667085;
+            margin-bottom: 5px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #fff4d6;
+            color: #9a6700;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .empty {
+            color: #667085;
+            padding: 10px 0;
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- =========================================
+     ADVERTISER NAVIGATION
+========================================= -->
+
+<aside class="lr-sidebar">
+
+    <div class="lr-logo">
+        LocalReach
+    </div>
+
+    <a href="dashboard.html" class="lr-nav-link">
+        🏠 Dashboard
+    </a>
+
+    <a href="business.html" class="lr-nav-link">
+        🏢 Business
+    </a>
+
+    <a href="advertisements.html" class="lr-nav-link">
+        📢 Advertisements
+    </a>
+
+    <a href="campaigns.html" class="lr-nav-link">
+        📋 Campaigns
+    </a>
+
+    <a href="create-campaign.html" class="lr-nav-link">
+        ➕ Create Campaign
+    </a>
+
+    <a href="screens.html" class="lr-nav-link">
+        🖥️ Screens
+    </a>
+
+    <a href="analytics.html" class="lr-nav-link">
+        📊 Analytics
+    </a>
+
+    <a href="../notifications.html" class="lr-nav-link">
+        🔔 Notifications
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH ADVERTISER NAVIGATION
+    ========================================= */
+
+    .lr-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-nav-link.lr-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+       The correct option stays highlighted
+       on every advertiser page.
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(".lr-nav-link")
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="header">
+
+            <div>
+
+                <h1>Advertisements</h1>
+
+                <p>
+                    Upload and manage your advertisements.
+                </p>
+
+            </div>
+
+            <div class="user">
+                👤 <span id="userName">Advertiser</span>
+            </div>
+
+        </div>
+
+
+        <!-- UPLOAD -->
+
+        <section class="card">
+
+            <h2>Upload Advertisement</h2>
+
+            <form id="uploadForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label for="title">
+                            Advertisement Title
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            placeholder="Example: Summer Offer"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="duration">
+                            Duration (seconds)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="duration"
+                            value="30"
+                            min="5"
+                            max="300"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label for="advertisement">
+                            Advertisement File
+                        </label>
+
+                        <input
+                            type="file"
+                            id="advertisement"
+                            class="file-input"
+                            accept=".jpg,.jpeg,.png,.webp,.mp4,.webm"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="upload-btn"
+                    id="uploadButton"
+                >
+                    Upload Advertisement
+                </button>
+
+
+                <div
+                    id="message"
+                    class="message"
+                ></div>
+
+            </form>
+
+        </section>
+
+
+        <!-- LIST -->
+
+        <section class="card">
+
+            <h2>My Advertisements</h2>
+
+            <div
+                id="advertisementList"
+                class="ad-list"
+            >
+
+                <p class="empty">
+                    Loading advertisements...
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const token =
+        localStorage.getItem("token");
+
+
+    // ========================================================
+    // CHECK LOGIN
+    // ========================================================
+
+    if (!token) {
+
+        window.location.href =
+            "../login.html";
+
+    }
+
+
+    // ========================================================
+    // DISPLAY USER NAME
+    // ========================================================
+
+    const storedUser =
+        localStorage.getItem("user");
+
+    if (storedUser) {
+
+        try {
+
+            const user =
+                JSON.parse(storedUser);
+
+            document.getElementById(
+                "userName"
+            ).textContent =
+                user.full_name || "Advertiser";
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+
+    // ========================================================
+    // UPLOAD ADVERTISEMENT
+    // ========================================================
+
+    document.getElementById(
+        "uploadForm"
+    ).addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const title =
+                document.getElementById(
+                    "title"
+                ).value.trim();
+
+
+            const duration =
+                document.getElementById(
+                    "duration"
+                ).value;
+
+
+            const file =
+                document.getElementById(
+                    "advertisement"
+                ).files[0];
+
+
+            const message =
+                document.getElementById(
+                    "message"
+                );
+
+
+            const button =
+                document.getElementById(
+                    "uploadButton"
+                );
+
+
+            if (!file) {
+
+                message.textContent =
+                    "Please select a file.";
+
+                message.className =
+                    "message error";
+
+                return;
+
+            }
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "title",
+                title
+            );
+
+
+            formData.append(
+                "durationSeconds",
+                duration
+            );
+
+
+            formData.append(
+                "advertisement",
+                file
+            );
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Uploading...";
+
+            message.textContent = "";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/advertisements/upload",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            },
+
+                            body: formData
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Upload failed"
+                    );
+
+                }
+
+
+                message.textContent =
+                    "Advertisement uploaded successfully!";
+
+                message.className =
+                    "message success";
+
+
+                document.getElementById(
+                    "uploadForm"
+                ).reset();
+
+
+                document.getElementById(
+                    "duration"
+                ).value = 30;
+
+
+                loadAdvertisements();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    error.message;
+
+                message.className =
+                    "message error";
+
+            } finally {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "Upload Advertisement";
+
+            }
+
+        }
+    );
+
+
+    // ========================================================
+    // LOAD ADVERTISEMENTS
+    // ========================================================
+
+    async function loadAdvertisements() {
+
+        const container =
+            document.getElementById(
+                "advertisementList"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "http://localhost:5000/api/advertisements",
+                    {
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to load advertisements"
+                );
+
+            }
+
+
+            const advertisements =
+                data.advertisements || [];
+
+
+            if (advertisements.length === 0) {
+
+                container.innerHTML = `
+                    <p class="empty">
+                        No advertisements uploaded yet.
+                    </p>
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                advertisements.map(ad => {
+
+                    return `
+                        <div class="ad-item">
+
+                            <div class="ad-info">
+
+                                <h3>
+                                    ${escapeHtml(ad.title)}
+                                </h3>
+
+                                <p>
+                                    Duration:
+                                    ${ad.duration_seconds}s
+                                </p>
+
+                                <p>
+                                    Type:
+                                    ${escapeHtml(ad.file_type)}
+                                </p>
+
+                                <p>
+                                    Uploaded:
+                                    ${new Date(
+                                        ad.created_at
+                                    ).toLocaleDateString("en-IN")}
+                                </p>
+
+                            </div>
+
+                            <div>
+
+                                <span class="status">
+                                    ${escapeHtml(ad.status)}
+                                </span>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                }).join("");
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            container.innerHTML = `
+                <p class="empty">
+                    Failed to load advertisements.
+                </p>
+            `;
+
+        }
+
+    }
+
+
+    // ========================================================
+    // ESCAPE HTML
+    // ========================================================
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value ?? "";
+
+        return div.innerHTML;
+
+    }
+
+
+    // ========================================================
+    // LOGOUT
+    // ========================================================
+
+    function logout() {
+
+        localStorage.removeItem("token");
+
+        localStorage.removeItem("user");
+
+        window.location.href =
+            "../login.html";
+
+    }
+
+
+    // ========================================================
+    // INITIAL LOAD
+    // ========================================================
+
+    loadAdvertisements();
+
+</script>
+
+</body>
+
+</html>

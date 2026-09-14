@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Campaign - LocalReach</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6fa;
+            color: #111827;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 278px;
+            background: #111827;
+            color: white;
+            padding: 30px 16px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .sidebar h2 {
+            font-size: 22px;
+            margin-bottom: 35px;
+            padding-left: 18px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #e5e7eb;
+            text-decoration: none;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .sidebar a:hover {
+            background: #1f2937;
+        }
+
+        .main {
+            margin-left: 278px;
+            width: calc(100% - 278px);
+            padding: 40px 34px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 34px;
+            max-width: 1000px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        /* APPROVAL INFO */
+
+        .approval-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+            padding: 14px 16px;
+            border-radius: 9px;
+            margin-bottom: 25px;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .approval-info.warning {
+            background: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+
+        .approval-info.error-info {
+            background: #fee2e2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        input:disabled {
+            background: #f3f4f6;
+            cursor: not-allowed;
+        }
+
+        .button-row {
+            margin-top: 30px;
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            padding: 13px 22px;
+            border: none;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .save-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- =========================================
+     ADVERTISER NAVIGATION
+========================================= -->
+
+<aside class="lr-sidebar">
+
+    <div class="lr-logo">
+        LocalReach
+    </div>
+
+    <a href="dashboard.html" class="lr-nav-link">
+        🏠 Dashboard
+    </a>
+
+    <a href="business.html" class="lr-nav-link">
+        🏢 Business
+    </a>
+
+    <a href="advertisements.html" class="lr-nav-link">
+        📢 Advertisements
+    </a>
+
+    <a href="campaigns.html" class="lr-nav-link">
+        📋 Campaigns
+    </a>
+
+    <a href="create-campaign.html" class="lr-nav-link">
+        ➕ Create Campaign
+    </a>
+
+    <a href="screens.html" class="lr-nav-link">
+        🖥️ Screens
+    </a>
+
+    <a href="analytics.html" class="lr-nav-link">
+        📊 Analytics
+    </a>
+
+    <a href="../notifications.html" class="lr-nav-link">
+        🔔 Notifications
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH ADVERTISER NAVIGATION
+    ========================================= */
+
+    .lr-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-nav-link.lr-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+       The correct option stays highlighted
+       on every advertiser page.
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(".lr-nav-link")
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+
+        <!-- MAIN CONTENT -->
+
+        <main class="main">
+
+            <a
+                href="campaign-details.html?id="
+                id="backLink"
+                class="back-link"
+            >
+                ← Back to Campaign
+            </a>
+
+
+            <div class="card">
+
+                <h1>
+                    Edit Campaign
+                </h1>
+
+                <p class="subtitle">
+                    Update your campaign information below.
+                </p>
+
+
+                <!-- APPROVAL INFORMATION -->
+
+                <div
+                    id="approvalInfo"
+                    class="approval-info"
+                ></div>
+
+
+                <form id="editCampaignForm">
+
+                    <div class="form-grid">
+
+
+                        <!-- CAMPAIGN NAME -->
+
+                        <div class="form-group">
+
+                            <label for="campaignName">
+                                Campaign Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="campaignName"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- ADVERTISEMENT TITLE -->
+
+                        <div class="form-group">
+
+                            <label for="adTitle">
+                                Advertisement Title
+                            </label>
+
+                            <input
+                                type="text"
+                                id="adTitle"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- START DATE -->
+
+                        <div class="form-group">
+
+                            <label for="startDate">
+                                Start Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="startDate"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- END DATE -->
+
+                        <div class="form-group">
+
+                            <label for="endDate">
+                                End Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="endDate"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- TARGET CITY -->
+
+                        <div class="form-group">
+
+                            <label for="targetCity">
+                                Target City
+                            </label>
+
+                            <input
+                                type="text"
+                                id="targetCity"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- TARGET AREA -->
+
+                        <div class="form-group">
+
+                            <label for="targetArea">
+                                Target Area
+                            </label>
+
+                            <input
+                                type="text"
+                                id="targetArea"
+                            >
+
+                        </div>
+
+
+                        <!-- BUDGET -->
+
+                        <div class="form-group">
+
+                            <label for="budget">
+                                Budget (₹)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="budget"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="button-row">
+
+                        <button
+                            type="submit"
+                            class="save-btn"
+                            id="saveButton"
+                        >
+                            Save Changes
+                        </button>
+
+                        <button
+                            type="button"
+                            class="cancel-btn"
+                            onclick="goBack()"
+                        >
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <div
+                    id="message"
+                    class="message"
+                ></div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <script>
+
+        // ==========================================
+        // AUTHENTICATION
+        // ==========================================
+
+        const token =
+            localStorage.getItem("token");
+
+
+        if (!token) {
+
+            window.location.href =
+                "../login.html";
+
+        }
+
+
+        // ==========================================
+        // GET CAMPAIGN ID
+        // ==========================================
+
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const campaignId =
+            urlParams.get("id");
+
+
+        if (!campaignId) {
+
+            alert(
+                "Campaign ID is missing."
+            );
+
+            window.location.href =
+                "campaigns.html";
+
+        }
+
+
+        // ==========================================
+        // UPDATE BACK LINK
+        // ==========================================
+
+        document.getElementById(
+            "backLink"
+        ).href =
+            `campaign-details.html?id=${campaignId}`;
+
+
+        // ==========================================
+        // CURRENT CAMPAIGN STATUS
+        // ==========================================
+
+        let currentCampaignStatus =
+            null;
+
+
+        // ==========================================
+        // SHOW APPROVAL INFORMATION
+        // ==========================================
+
+        function showApprovalInfo(
+            status
+        ) {
+
+            const info =
+                document.getElementById(
+                    "approvalInfo"
+                );
+
+
+            info.style.display =
+                "block";
+
+
+            if (
+                status === "active"
+            ) {
+
+                info.className =
+                    "approval-info warning";
+
+
+                info.innerHTML = `
+                    <strong>⚠️ Admin approval required</strong><br>
+                    This campaign is currently active.
+                    Saving changes will send it back to
+                    <strong>Pending Approval</strong>.
+                    An admin must review and approve the
+                    campaign before it becomes active again.
+                `;
+
+            }
+
+            else if (
+                status === "paused"
+            ) {
+
+                info.className =
+                    "approval-info warning";
+
+
+                info.innerHTML = `
+                    <strong>🔄 Re-approval required</strong><br>
+                    This campaign is currently paused.
+                    Saving changes will submit it for
+                    <strong>Admin Approval</strong>.
+                `;
+
+            }
+
+            else if (
+                status === "pending"
+            ) {
+
+                info.className =
+                    "approval-info";
+
+
+                info.innerHTML = `
+                    <strong>⏳ Pending Approval</strong><br>
+                    This campaign is already waiting for
+                    admin approval. Your changes will remain
+                    under admin review.
+                `;
+
+            }
+
+            else if (
+                status === "draft"
+            ) {
+
+                info.className =
+                    "approval-info";
+
+
+                info.innerHTML = `
+                    <strong>📝 Draft Campaign</strong><br>
+                    This campaign is currently a draft.
+                `;
+
+            }
+
+        }
+
+
+        // ==========================================
+        // LOAD CAMPAIGN
+        // ==========================================
+
+        async function loadCampaign() {
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        `http://localhost:5000/api/campaigns/${campaignId}`,
+
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+
+                        }
+
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load campaign"
+                    );
+
+                }
+
+
+                const campaign =
+                    data.campaign;
+
+
+                // Store current status
+
+                currentCampaignStatus =
+                    campaign.status;
+
+
+                // ==========================================
+                // PREVENT EDITING REJECTED / COMPLETED
+                // ==========================================
+
+                if (
+                    campaign.status === "rejected" ||
+                    campaign.status === "completed"
+                ) {
+
+                    const info =
+                        document.getElementById(
+                            "approvalInfo"
+                        );
+
+
+                    info.style.display =
+                        "block";
+
+
+                    info.className =
+                        "approval-info error-info";
+
+
+                    info.innerHTML = `
+
+                        <strong>
+                            ${
+                                campaign.status === "rejected"
+                                    ? "❌ Campaign Rejected"
+                                    : "✅ Campaign Completed"
+                            }
+                        </strong>
+                        <br>
+
+                        This campaign cannot be edited.
+
+                    `;
+
+
+                    document.getElementById(
+                        "saveButton"
+                    ).disabled = true;
+
+
+                    return;
+
+                }
+
+
+                // Show status information
+
+                showApprovalInfo(
+                    campaign.status
+                );
+
+
+                // ==========================================
+                // FILL FORM
+                // ==========================================
+
+                document.getElementById(
+                    "campaignName"
+                ).value =
+                    campaign.name || "";
+
+
+                document.getElementById(
+                    "adTitle"
+                ).value =
+                    campaign.advertisement_title || "";
+
+
+                document.getElementById(
+                    "startDate"
+                ).value =
+                    campaign.start_date
+                        ? campaign.start_date.substring(
+                            0,
+                            10
+                        )
+                        : "";
+
+
+                document.getElementById(
+                    "endDate"
+                ).value =
+                    campaign.end_date
+                        ? campaign.end_date.substring(
+                            0,
+                            10
+                        )
+                        : "";
+
+
+                document.getElementById(
+                    "targetCity"
+                ).value =
+                    campaign.target_city || "";
+
+
+                document.getElementById(
+                    "targetArea"
+                ).value =
+                    campaign.target_area || "";
+
+
+                document.getElementById(
+                    "budget"
+                ).value =
+                    campaign.budget || "";
+
+
+            } catch (error) {
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // SAVE CHANGES
+        // ==========================================
+
+        document.getElementById(
+            "editCampaignForm"
+        ).addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                // ==========================================
+                // DATE VALIDATION
+                // ==========================================
+
+                const startDate =
+                    document.getElementById(
+                        "startDate"
+                    ).value;
+
+
+                const endDate =
+                    document.getElementById(
+                        "endDate"
+                    ).value;
+
+
+                if (
+                    startDate &&
+                    endDate &&
+                    new Date(endDate) <
+                    new Date(startDate)
+                ) {
+
+                    showMessage(
+                        "Campaign end date cannot be before start date.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                // ==========================================
+                // CAMPAIGN DATA
+                // ==========================================
+
+                const campaignData = {
+
+                    name:
+                        document.getElementById(
+                            "campaignName"
+                        ).value.trim(),
+
+                    advertisementTitle:
+                        document.getElementById(
+                            "adTitle"
+                        ).value.trim(),
+
+                    startDate:
+                        startDate,
+
+                    endDate:
+                        endDate,
+
+                    targetCity:
+                        document.getElementById(
+                            "targetCity"
+                        ).value.trim(),
+
+                    targetArea:
+                        document.getElementById(
+                            "targetArea"
+                        ).value.trim(),
+
+                    budget:
+                        document.getElementById(
+                            "budget"
+                        ).value
+
+                };
+
+
+                // ==========================================
+                // CONFIRM RE-APPROVAL
+                // ==========================================
+
+                if (
+                    currentCampaignStatus === "active" ||
+                    currentCampaignStatus === "paused"
+                ) {
+
+                    const confirmed =
+                        confirm(
+
+                            "This campaign requires admin approval after editing. Continue?"
+
+                        );
+
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+
+                            `http://localhost:5000/api/campaigns/${campaignId}`,
+
+                            {
+
+                                method: "PUT",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Authorization":
+                                        `Bearer ${token}`
+
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        campaignData
+                                    )
+
+                            }
+
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+
+                            data.message ||
+                            "Failed to update campaign"
+
+                        );
+
+                    }
+
+
+                    // ==========================================
+                    // SUCCESS MESSAGE
+                    // ==========================================
+
+                    if (
+                        currentCampaignStatus === "active" ||
+                        currentCampaignStatus === "paused"
+                    ) {
+
+                        showMessage(
+
+                            "Campaign updated successfully and submitted for admin approval.",
+
+                            "success"
+
+                        );
+
+                    }
+
+                    else {
+
+                        showMessage(
+
+                            "Campaign updated successfully!",
+
+                            "success"
+
+                        );
+
+                    }
+
+
+                    // Redirect after 1.5 seconds
+
+                    setTimeout(
+                        function() {
+
+                            window.location.href =
+                                `campaign-details.html?id=${campaignId}`;
+
+                        },
+                        1500
+                    );
+
+
+                } catch (error) {
+
+                    showMessage(
+                        error.message,
+                        "error"
+                    );
+
+                }
+
+            }
+        );
+
+
+        // ==========================================
+        // SHOW MESSAGE
+        // ==========================================
+
+        function showMessage(
+            message,
+            type
+        ) {
+
+            const messageBox =
+                document.getElementById(
+                    "message"
+                );
+
+
+            messageBox.textContent =
+                message;
+
+
+            messageBox.className =
+                `message ${type}`;
+
+
+            messageBox.style.display =
+                "block";
+
+        }
+
+
+        // ==========================================
+        // GO BACK
+        // ==========================================
+
+        function goBack() {
+
+            window.location.href =
+                `campaign-details.html?id=${campaignId}`;
+
+        }
+
+
+        // ==========================================
+        // LOGOUT
+        // ==========================================
+
+        function logout() {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            localStorage.removeItem(
+                "user"
+            );
+
+
+            window.location.href =
+                "../login.html";
+
+        }
+
+
+        // ==========================================
+        // LOAD CAMPAIGN ON PAGE OPEN
+        // ==========================================
+
+        loadCampaign();
+
+    </script>
+
+</body>
+
+</html>

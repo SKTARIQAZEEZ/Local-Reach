@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Advertisements - LocalReach</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #172033;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 240px;
+            background: #111827;
+            color: white;
+            padding: 25px 18px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 13px 12px;
+            margin-bottom: 7px;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #2563eb;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+            padding: 35px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .refresh-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .refresh-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* CARDS */
+
+        .advertisements {
+            display: grid;
+            gap: 18px;
+        }
+
+        .ad-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+        }
+
+        .ad-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .ad-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .details {
+            color: #5f6b7a;
+            line-height: 1.7;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #946200;
+        }
+
+        .status.approved {
+            background: #d1fae5;
+            color: #047857;
+        }
+
+        .status.rejected {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .actions {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .approve-btn,
+        .reject-btn {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .approve-btn {
+            background: #16a34a;
+        }
+
+        .approve-btn:hover {
+            background: #15803d;
+        }
+
+        .reject-btn {
+            background: #dc2626;
+        }
+
+        .reject-btn:hover {
+            background: #b91c1c;
+        }
+
+        .message {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .error {
+            color: #b91c1c;
+            background: #fee2e2;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        /* Admin Sidebar Navigation */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.sidebar a:hover {
+    background: #1e293b;
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+.sidebar a:active {
+    transform: translateX(1px);
+}
+
+/* Current page */
+.sidebar a[href="advertisements.html"] {
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.sidebar a[href="advertisements.html"]:hover {
+    background: #1d4ed8;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+   <!-- =========================================
+     ADMIN NAVIGATION
+========================================= -->
+
+<aside class="lr-sidebar">
+
+    <div class="lr-logo">
+        LocalReach
+    </div>
+
+    <a href="dashboard.html" class="lr-nav-link">
+        🏠 Dashboard
+    </a>
+
+    <a href="payouts.html" class="lr-nav-link">
+        💰 Payouts
+    </a>
+
+    <a href="users.html" class="lr-nav-link">
+        👥 Users
+    </a>
+
+    <a href="screens.html" class="lr-nav-link">
+        🖥️ Screens
+    </a>
+
+    <a href="campaigns.html" class="lr-nav-link">
+        📋 Campaigns
+    </a>
+
+    <a href="advertisements.html" class="lr-nav-link">
+        📢 Advertisements
+    </a>
+
+    <a href="analytics.html" class="lr-nav-link">
+        📊 Advertisement Analytics
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH ADMIN NAVIGATION
+    ========================================= */
+
+    .lr-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-nav-link.lr-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+       The correct option stays highlighted
+       on every admin page.
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(".lr-nav-link")
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="header">
+
+            <h1>
+                Advertisements
+            </h1>
+
+            <button
+                class="refresh-btn"
+                onclick="loadAdvertisements()"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div id="message"></div>
+
+        <div
+            id="advertisements"
+            class="advertisements"
+        ></div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const API =
+        "http://localhost:5000";
+
+
+    // ==================================================
+    // AUTHENTICATION
+    // ==================================================
+
+    const token =
+        localStorage.getItem("token");
+
+
+    if (!token) {
+
+        window.location.href =
+            "../login.html";
+
+    }
+
+
+    // ==================================================
+    // LOAD ADVERTISEMENTS
+    // ==================================================
+
+    async function loadAdvertisements() {
+
+        const container =
+            document.getElementById(
+                "advertisements"
+            );
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        container.innerHTML = "";
+
+        message.innerHTML = "";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/api/admin/advertisements`,
+                    {
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to load advertisements"
+                );
+
+            }
+
+
+            const advertisements =
+                data.advertisements || [];
+
+
+            if (
+                advertisements.length === 0
+            ) {
+
+                container.innerHTML = `
+                    <div class="message">
+                        No advertisements found.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            advertisements.forEach(
+                advertisement => {
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+                    card.className =
+                        "ad-card";
+
+
+                    const status =
+                        advertisement.status ||
+                        "pending";
+
+
+                    let actions = "";
+
+
+                    if (
+                        status === "pending"
+                    ) {
+
+                        actions = `
+                            <div class="actions">
+
+                                <button
+                                    class="approve-btn"
+                                    onclick="approveAdvertisement('${advertisement.id}')"
+                                >
+                                    Approve
+                                </button>
+
+                                <button
+                                    class="reject-btn"
+                                    onclick="rejectAdvertisement('${advertisement.id}')"
+                                >
+                                    Reject
+                                </button>
+
+                            </div>
+                        `;
+
+                    }
+
+
+                    card.innerHTML = `
+
+                        <div class="ad-header">
+
+                            <div>
+
+                                <div class="ad-title">
+                                    ${escapeHtml(
+                                        advertisement.title
+                                    )}
+                                </div>
+
+                                <div class="details">
+
+                                    <div>
+                                        Advertiser:
+                                        ${escapeHtml(
+                                            advertisement.advertiser_name ||
+                                            "Unknown"
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        Email:
+                                        ${escapeHtml(
+                                            advertisement.advertiser_email ||
+                                            "N/A"
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        Duration:
+                                        ${advertisement.duration_seconds || 0}
+                                        seconds
+                                    </div>
+
+                                    <div>
+                                        Type:
+                                        ${escapeHtml(
+                                            advertisement.file_type ||
+                                            "N/A"
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        Uploaded:
+                                        ${formatDate(
+                                            advertisement.created_at
+                                        )}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <span
+                                class="status ${status}"
+                            >
+                                ${capitalize(status)}
+                            </span>
+
+                        </div>
+
+                        ${actions}
+
+                    `;
+
+
+                    container.appendChild(
+                        card
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.innerHTML = `
+                <div class="error">
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </div>
+            `;
+
+        }
+
+    }
+
+
+    // ==================================================
+    // APPROVE
+    // ==================================================
+
+    async function approveAdvertisement(
+        id
+    ) {
+
+        if (
+            !confirm(
+                "Approve this advertisement?"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/api/admin/advertisements/${id}/approve`,
+                    {
+                        method: "PATCH",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                alert(
+                    data.message ||
+                    "Failed to approve advertisement"
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Advertisement approved successfully."
+            );
+
+
+            loadAdvertisements();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Server error while approving advertisement."
+            );
+
+        }
+
+    }
+
+
+    // ==================================================
+    // REJECT
+    // ==================================================
+
+    async function rejectAdvertisement(
+        id
+    ) {
+
+        if (
+            !confirm(
+                "Reject this advertisement?"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/api/admin/advertisements/${id}/reject`,
+                    {
+                        method: "PATCH",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                alert(
+                    data.message ||
+                    "Failed to reject advertisement"
+                );
+
+                return;
+
+            }
+
+
+            alert(
+                "Advertisement rejected successfully."
+            );
+
+
+            loadAdvertisements();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Server error while rejecting advertisement."
+            );
+
+        }
+
+    }
+
+
+    // ==================================================
+    // HELPERS
+    // ==================================================
+
+    function capitalize(value) {
+
+        return value
+            .charAt(0)
+            .toUpperCase() +
+            value.slice(1);
+
+    }
+
+
+    function formatDate(value) {
+
+        if (!value) {
+
+            return "N/A";
+
+        }
+
+        return new Date(value)
+            .toLocaleString();
+
+    }
+
+
+    function escapeHtml(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    // ==================================================
+    // LOGOUT
+    // ==================================================
+
+    function logout() {
+
+        localStorage.removeItem(
+            "token"
+        );
+
+        localStorage.removeItem(
+            "user"
+        );
+
+        window.location.href =
+            "../login.html";
+
+    }
+
+
+    // ==================================================
+    // INITIAL LOAD
+    // ==================================================
+
+    loadAdvertisements();
+
+</script>
+
+</body>
+
+</html>

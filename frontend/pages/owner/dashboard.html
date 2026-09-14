@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Screen Owner Dashboard - LocalReach</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 35px;
+            padding-left: 10px;
+        }
+
+        .nav-link {
+            display: block;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 13px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #374151;
+            color: white;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #6b7280;
+            margin-top: 6px;
+        }
+
+        /* KPI CARDS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* CONTENT */
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .screen-box {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .screen-box h3 {
+            margin-bottom: 8px;
+        }
+
+        .screen-box p {
+            color: #6b7280;
+            margin: 5px 0;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .empty {
+            color: #6b7280;
+        }
+        /* NOTIFICATIONS */
+
+.notification-link {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notification-badge {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #ef4444;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                padding: 20px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    
+<!-- =========================================
+     SCREEN OWNER NAVIGATION
+========================================= -->
+
+<aside class="lr-owner-sidebar">
+
+    <div class="lr-owner-logo">
+        LocalReach
+    </div>
+
+    <a
+        href="dashboard.html"
+        class="lr-owner-nav-link"
+    >
+        🏠 Dashboard
+    </a>
+
+    <a
+        href="screens.html"
+        class="lr-owner-nav-link"
+    >
+        🖥️ My Screens
+    </a>
+
+    <a
+        href="campaigns.html"
+        class="lr-owner-nav-link"
+    >
+        📋 Campaigns
+    </a>
+
+    <a
+        href="earnings.html"
+        class="lr-owner-nav-link"
+    >
+        💰 Earnings
+    </a>
+
+    <a
+        href="analytics.html"
+        class="lr-owner-nav-link"
+    >
+        📊 Analytics
+    </a>
+
+    <a
+        href="payouts.html"
+        class="lr-owner-nav-link"
+    >
+        💳 Payouts
+    </a>
+
+    <a
+        href="../notifications.html"
+        class="lr-owner-nav-link"
+    >
+        🔔 Notifications
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-owner-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH OWNER NAVIGATION
+    ========================================= */
+
+    .lr-owner-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-owner-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-owner-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-owner-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-owner-nav-link.lr-owner-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-owner-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(
+                ".lr-owner-nav-link"
+            )
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-owner-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <div class="header">
+
+            <h1>Screen Owner Dashboard</h1>
+
+            <p>
+                Manage your digital screens and track your earnings.
+            </p>
+
+        </div>
+
+
+        <!-- KPI CARDS -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <h3>Total Screens</h3>
+
+                <div
+                    class="value"
+                    id="totalScreens"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>Online Screens</h3>
+
+                <div
+                    class="value"
+                    id="onlineScreens"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>Campaigns Running</h3>
+
+                <div
+                    class="value"
+                    id="campaignsRunning"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>Total Earnings</h3>
+
+                <div
+                    class="value"
+                    id="totalEarnings"
+                >
+                    ₹0
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MY SCREENS -->
+
+        <div class="card">
+
+            <h2>My Screens</h2>
+
+            <div id="screensContainer">
+
+                <p class="empty">
+                    Loading screens...
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- RECENT ACTIVITY -->
+
+        <div class="card">
+
+            <h2>Recent Activity</h2>
+
+            <p class="empty">
+                No recent activity yet.
+            </p>
+
+        </div>
+
+    </main>
+
+
+<script>
+
+const token =
+    localStorage.getItem("token");
+
+
+/* ============================================================
+   AUTH CHECK
+============================================================ */
+
+if (!token) {
+
+    window.location.href =
+        "../login.html";
+
+}
+
+
+/* ============================================================
+   ROLE CHECK
+============================================================ */
+
+const user = JSON.parse(
+    localStorage.getItem("user") || "{}"
+);
+
+if (user.role !== "screen_owner") {
+
+    window.location.href =
+        "../advertiser/dashboard.html";
+
+}
+
+
+/* ============================================================
+   LOAD SCREEN OWNER DASHBOARD
+============================================================ */
+
+async function loadDashboard() {
+
+    try {
+
+        /*
+         * We need a screen-owner API for this dashboard.
+         *
+         * That API will be created in the next step.
+         *
+         * For now this page is prepared to receive:
+         * - screen information
+         * - campaign information
+         * - earnings information
+         */
+
+        const response = await fetch(
+            "http://localhost:5000/api/owner/dashboard",
+            {
+                headers: {
+                    "Authorization":
+                        "Bearer " + token
+                }
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to load dashboard"
+            );
+
+        }
+
+
+        document.getElementById(
+            "totalScreens"
+        ).textContent =
+            data.totalScreens || 0;
+
+
+        document.getElementById(
+            "onlineScreens"
+        ).textContent =
+            data.onlineScreens || 0;
+
+
+        document.getElementById(
+            "campaignsRunning"
+        ).textContent =
+            data.campaignsRunning || 0;
+
+
+        document.getElementById(
+            "totalEarnings"
+        ).textContent =
+            "₹" +
+            Number(
+                data.totalEarnings || 0
+            ).toFixed(2);
+
+
+        displayScreens(
+            data.screens || []
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Dashboard error:",
+            error
+        );
+
+        document.getElementById(
+            "screensContainer"
+        ).innerHTML = `
+            <p class="empty">
+                Screen information will appear here
+                once the owner API is connected.
+            </p>
+        `;
+
+    }
+
+}
+
+
+/* ============================================================
+   DISPLAY SCREENS
+============================================================ */
+
+function displayScreens(screens) {
+
+    const container =
+        document.getElementById(
+            "screensContainer"
+        );
+
+
+    if (
+        !screens ||
+        screens.length === 0
+    ) {
+
+        container.innerHTML = `
+            <p class="empty">
+                No screens registered yet.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    screens.forEach(screen => {
+
+        const box =
+            document.createElement("div");
+
+
+        box.className =
+            "screen-box";
+
+
+        box.innerHTML = `
+
+            <h3>
+                ${screen.screen_name}
+            </h3>
+
+            <p>
+                Screen ID:
+                ${screen.screen_id}
+            </p>
+
+            <p>
+                Business:
+                ${screen.business_name}
+            </p>
+
+            <p>
+                Location:
+                ${screen.area || ""}
+                ${screen.city || ""}
+            </p>
+
+            <p>
+                Price:
+                ₹${Number(
+                    screen.price_per_week || 0
+                ).toFixed(2)}/week
+            </p>
+
+            <span class="status">
+                ${screen.status}
+            </span>
+
+        `;
+
+
+        container.appendChild(box);
+
+    });
+
+}
+
+
+/* ============================================================
+   LOGOUT
+============================================================ */
+
+
+
+function openProfile(event) {
+    event.preventDefault();
+
+    const user = JSON.parse(
+        localStorage.getItem("user") || "{}"
+    );
+
+    alert(
+        "Profile\n\n" +
+        "Name: " + (user.full_name || "-") + "\n" +
+        "Email: " + (user.email || "-") + "\n" +
+        "Phone: " + (user.phone || "-") + "\n" +
+        "Role: " + (user.role || "-")
+    );
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    window.location.href = "../login.html";
+}
+
+/* ============================================================
+   INITIAL LOAD
+============================================================ */
+
+/* ============================================================
+   NOTIFICATION COUNT
+============================================================ */
+
+async function loadNotificationCount() {
+
+    if (!token) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:5000/api/notifications/unread-count",
+            {
+                method: "GET",
+                headers: {
+                    "Authorization":
+                        "Bearer " + token
+                }
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            console.error(
+                "Notification count error:",
+                data.message
+            );
+
+            return;
+        }
+
+
+        const count =
+            Number(data.unreadCount) || 0;
+
+
+        const badge =
+            document.getElementById(
+                "notificationBadge"
+            );
+
+
+        if (!badge) {
+            return;
+        }
+
+
+        if (count > 0) {
+
+            badge.textContent =
+                count > 99
+                    ? "99+"
+                    : count;
+
+            badge.style.display =
+                "inline-flex";
+
+        } else {
+
+            badge.style.display =
+                "none";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Error loading notification count:",
+            error
+        );
+
+    }
+
+}
+loadDashboard();
+loadNotificationCount();
+
+
+</script>
+
+</body>
+</html>

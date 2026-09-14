@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Details - LocalReach</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fa;
+            color: #111827;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 270px;
+            background: #111827;
+            color: white;
+            padding: 30px 16px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 45px;
+            padding-left: 12px;
+        }
+
+        .nav a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 14px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            font-size: 17px;
+        }
+
+        .nav a:hover {
+            background: #2563eb;
+        }
+
+        .main {
+            margin-left: 270px;
+            width: calc(100% - 270px);
+            padding: 35px 40px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .welcome {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .campaign-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 25px;
+        }
+
+        .campaign-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .advertisement {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 9px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status.draft {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .status.paused {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status.completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 10px 16px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .approve {
+            background: #16a34a;
+            color: white;
+        }
+
+        .reject {
+            background: #dc2626;
+            color: white;
+        }
+
+        .delete {
+            background: #dc2626;
+            color: white;
+        }
+
+        .section-title {
+            font-size: 23px;
+            margin-top: 0;
+            margin-bottom: 22px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .label {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .value {
+            font-size: 17px;
+            color: #111827;
+        }
+
+        .screen {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+        }
+
+        .screen-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .screen-details {
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        .message {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            color: #64748b;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+                padding: 25px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .campaign-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            LocalReach
+        </div>
+
+        <nav class="nav">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="payouts.html">
+                Payouts
+            </a>
+
+            <a href="users.html">
+                Users
+            </a>
+
+            <a href="screens.html">
+                Screens
+            </a>
+
+            <a href="campaigns.html">
+                Campaigns
+            </a>
+
+            <a href="../login.html">
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <h1>Campaign Details</h1>
+
+            <div class="welcome">
+                Admin Panel
+            </div>
+
+        </div>
+
+
+        <a href="campaigns.html" class="back">
+            ← Back to Campaigns
+        </a>
+
+
+        <div id="errorBox"></div>
+
+
+        <!-- CAMPAIGN HEADER -->
+
+        <div class="card">
+
+            <div class="campaign-header">
+
+                <div>
+
+                    <div
+                        id="campaignName"
+                        class="campaign-title">
+                        Loading...
+                    </div>
+
+                    <div
+                        id="advertisementName"
+                        class="advertisement">
+                        Loading advertisement...
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <span
+                        id="campaignStatus"
+                        class="status">
+                        Loading...
+                    </span>
+
+
+                    <div
+                        id="actionButtons"
+                        class="actions">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CAMPAIGN INFORMATION -->
+
+        <div class="card">
+
+            <h2 class="section-title">
+                Campaign Information
+            </h2>
+
+
+            <div class="info-grid">
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Start Date
+                    </div>
+
+                    <div
+                        id="startDate"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        End Date
+                    </div>
+
+                    <div
+                        id="endDate"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Budget
+                    </div>
+
+                    <div
+                        id="budget"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Advertiser
+                    </div>
+
+                    <div
+                        id="advertiser"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Target City
+                    </div>
+
+                    <div
+                        id="targetCity"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Target Area
+                    </div>
+
+                    <div
+                        id="targetArea"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Target Radius
+                    </div>
+
+                    <div
+                        id="radius"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Verified Plays
+                    </div>
+
+                    <div
+                        id="verifiedPlays"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ASSIGNED SCREENS -->
+
+        <div class="card">
+
+            <h2 class="section-title">
+                Assigned Screens
+            </h2>
+
+            <div id="assignedScreens">
+
+                <div class="loading">
+                    Loading screens...
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ADVERTISEMENT -->
+
+        <div class="card">
+
+            <h2 class="section-title">
+                Advertisement
+            </h2>
+
+            <div class="info-grid">
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Advertisement Title
+                    </div>
+
+                    <div
+                        id="adTitle"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Advertisement Status
+                    </div>
+
+                    <div
+                        id="adStatus"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        Duration
+                    </div>
+
+                    <div
+                        id="adDuration"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <div class="label">
+                        File Type
+                    </div>
+
+                    <div
+                        id="fileType"
+                        class="value">
+                        -
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="../../js/config.js"></script>
+
+<script>
+
+    if (!requireLogin("admin")) {
+        throw new Error("Admin login required");
+    }
+
+
+    const campaignId =
+        new URLSearchParams(window.location.search)
+            .get("id");
+
+
+    if (!campaignId) {
+
+        document.getElementById("errorBox").innerHTML =
+            `<div class="error">
+                Campaign ID is missing from the URL.
+             </div>`;
+
+        throw new Error("Campaign ID missing");
+
+    }
+
+
+    async function loadCampaign() {
+
+        try {
+
+            /*
+             * Admin campaign details endpoint
+             */
+
+            const response = await fetch(
+                `${SPOTLOCAL_API}/admin/campaigns/${campaignId}`,
+                {
+                    headers: authHeaders()
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to load campaign"
+                );
+
+            }
+
+
+            const campaign =
+                data.campaign || data;
+
+
+            /*
+             * Basic campaign information
+             */
+
+            document.getElementById("campaignName")
+                .textContent =
+                campaign.name || "-";
+
+
+            document.getElementById("advertisementName")
+                .textContent =
+                campaign.advertisement_title ||
+                campaign.advertisement_name ||
+                "-";
+
+
+            /*
+             * Status
+             */
+
+            const status =
+                campaign.status || "unknown";
+
+            const statusElement =
+                document.getElementById("campaignStatus");
+
+            statusElement.textContent =
+                status.charAt(0).toUpperCase() +
+                status.slice(1);
+
+            statusElement.className =
+                "status " + status;
+
+
+            /*
+             * Information
+             */
+
+            document.getElementById("startDate")
+                .textContent =
+                formatDate(campaign.start_date);
+
+
+            document.getElementById("endDate")
+                .textContent =
+                formatDate(campaign.end_date);
+
+
+            document.getElementById("budget")
+                .textContent =
+                "₹" +
+                Number(campaign.budget || 0)
+                    .toFixed(2);
+
+
+            document.getElementById("advertiser")
+                .textContent =
+                campaign.advertiser_name ||
+                campaign.advertiser_email ||
+                "-";
+
+
+            document.getElementById("targetCity")
+                .textContent =
+                campaign.target_city || "-";
+
+
+            document.getElementById("targetArea")
+                .textContent =
+                campaign.target_area || "-";
+
+
+            document.getElementById("radius")
+                .textContent =
+                campaign.radius_km
+                    ? campaign.radius_km + " km"
+                    : "Not specified";
+
+
+            document.getElementById("verifiedPlays")
+                .textContent =
+                campaign.verified_plays || 0;
+
+
+            /*
+             * Advertisement information
+             */
+
+            document.getElementById("adTitle")
+                .textContent =
+                campaign.advertisement_title || "-";
+
+
+            document.getElementById("adStatus")
+                .textContent =
+                campaign.advertisement_status || "-";
+
+
+            document.getElementById("adDuration")
+                .textContent =
+                campaign.duration_seconds
+                    ? campaign.duration_seconds +
+                      " seconds"
+                    : "-";
+
+
+            document.getElementById("fileType")
+                .textContent =
+                campaign.file_type || "-";
+
+
+            /*
+             * Assigned screens
+             */
+
+            renderScreens(
+                campaign.screens || []
+            );
+
+
+            /*
+             * Admin action buttons
+             */
+
+            renderActions(status);
+
+
+        } catch (error) {
+
+            console.error(
+                "Campaign details error:",
+                error
+            );
+
+
+            document.getElementById("errorBox").innerHTML =
+                `<div class="error">
+                    ${escapeHtml(error.message)}
+                 </div>`;
+
+        }
+
+    }
+
+
+
+    function renderActions(status) {
+
+        const container =
+            document.getElementById("actionButtons");
+
+        container.innerHTML = "";
+
+
+        /*
+         * Only pending campaigns
+         * can be approved or rejected.
+         */
+
+        if (status === "pending") {
+
+            container.innerHTML = `
+
+                <button
+                    class="approve"
+                    onclick="approveCampaign()">
+                    ✓ Approve Campaign
+                </button>
+
+                <button
+                    class="reject"
+                    onclick="rejectCampaign()">
+                    ✕ Reject Campaign
+                </button>
+
+            `;
+
+        }
+
+    }
+
+
+
+    async function approveCampaign() {
+
+        if (
+            !confirm(
+                "Approve this campaign?"
+            )
+        ) {
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                `${SPOTLOCAL_API}/admin/campaigns/${campaignId}/approve`,
+                {
+                    method: "PATCH",
+                    headers: authHeaders()
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to approve campaign"
+                );
+
+            }
+
+
+            alert(
+                "Campaign approved successfully"
+            );
+
+
+            loadCampaign();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(error.message);
+
+        }
+
+    }
+
+
+
+    async function rejectCampaign() {
+
+        if (
+            !confirm(
+                "Reject this campaign?"
+            )
+        ) {
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                `${SPOTLOCAL_API}/admin/campaigns/${campaignId}/reject`,
+                {
+                    method: "PATCH",
+                    headers: authHeaders()
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Failed to reject campaign"
+                );
+
+            }
+
+
+            alert(
+                "Campaign rejected successfully"
+            );
+
+
+            loadCampaign();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(error.message);
+
+        }
+
+    }
+
+
+
+    function renderScreens(screens) {
+
+        const container =
+            document.getElementById(
+                "assignedScreens"
+            );
+
+
+        if (
+            !screens ||
+            screens.length === 0
+        ) {
+
+            container.innerHTML =
+                `<div class="message">
+                    No screens are currently
+                    assigned to this campaign.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            screens.map(screen => `
+
+                <div class="screen">
+
+                    <div class="screen-name">
+                        ${escapeHtml(
+                            screen.screen_name ||
+                            screen.name ||
+                            "-"
+                        )}
+                    </div>
+
+                    <div class="screen-details">
+
+                        📍
+                        ${escapeHtml(
+                            screen.area || "-"
+                        )},
+                        ${escapeHtml(
+                            screen.city || "-"
+                        )}
+
+                        <br>
+
+                        🖥️
+                        ${escapeHtml(
+                            screen.screen_id ||
+                            "-"
+                        )}
+
+                        <br>
+
+                        💰
+                        ₹${Number(
+                            screen.price ||
+                            screen.price_per_week ||
+                            0
+                        ).toFixed(2)}
+                        / week
+
+                        <br>
+
+                        Status:
+                        ${escapeHtml(
+                            screen.status ||
+                            "-"
+                        )}
+
+                    </div>
+
+                </div>
+
+            `).join("");
+
+    }
+
+
+
+    function formatDate(dateValue) {
+
+        if (!dateValue) {
+            return "-";
+        }
+
+
+        const date =
+            new Date(dateValue);
+
+
+        if (isNaN(date.getTime())) {
+            return dateValue;
+        }
+
+
+        return date.toLocaleDateString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+
+    function escapeHtml(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+
+    loadCampaign();
+
+</script>
+
+</body>
+</html>

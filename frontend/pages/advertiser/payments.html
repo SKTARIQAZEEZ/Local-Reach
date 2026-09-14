@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments - LocalReach</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 35px;
+            padding-left: 10px;
+        }
+
+        .nav-link {
+            display: block;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 13px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #374151;
+            color: white;
+        }
+
+        .main {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #6b7280;
+            margin-top: 6px;
+        }
+
+        .demo-badge {
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+        }
+
+        .payment-card h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .pay-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .pay-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .pay-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 7px;
+            display: none;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f9fafb;
+            font-size: 14px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status.paid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .empty {
+            color: #6b7280;
+            padding: 20px 0;
+        }
+
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            LocalReach
+        </div>
+
+        <a href="dashboard.html" class="nav-link">
+            Dashboard
+        </a>
+
+        <a href="business.html" class="nav-link">
+            My Business
+        </a>
+
+        <a href="campaigns.html" class="nav-link">
+            Campaigns
+        </a>
+
+        <a href="create-campaign.html" class="nav-link">
+            Create Campaign
+        </a>
+
+        <a href="advertisements.html" class="nav-link">
+            Advertisements
+        </a>
+
+        <a href="screens.html" class="nav-link">
+            Screen Network
+        </a>
+
+        <a href="analytics.html" class="nav-link">
+            Analytics
+        </a>
+
+        <a href="#" class="nav-link">
+            Reports
+        </a>
+
+        <a href="payments.html" class="nav-link active">
+            Payments
+        </a>
+
+        <a href="#" class="nav-link">
+            Profile
+        </a>
+
+        <a href="#" class="nav-link" onclick="logout()">
+            Logout
+        </a>
+
+    </aside>
+
+
+    <main class="main">
+
+        <div class="header">
+
+            <div>
+                <h1>Payments</h1>
+                <p>Manage your campaign payments</p>
+            </div>
+
+            <div class="demo-badge">
+                DEMO PAYMENT
+            </div>
+
+        </div>
+
+
+        <!-- PAYMENT FORM -->
+
+        <div class="payment-card">
+
+            <h2>Make Campaign Payment</h2>
+
+            <div class="form-group">
+
+                <label for="campaignSelect">
+                    Select Campaign
+                </label>
+
+                <select id="campaignSelect">
+                    <option value="">
+                        Loading campaigns...
+                    </option>
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="amount">
+                    Amount (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    placeholder="Enter amount"
+                    min="1"
+                >
+
+            </div>
+
+
+            <button
+                class="pay-btn"
+                id="payButton"
+                onclick="makePayment()"
+            >
+                Pay Now (Demo)
+            </button>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+        </div>
+
+
+        <!-- PAYMENT HISTORY -->
+
+        <div class="payment-card">
+
+            <h2>Payment History</h2>
+
+            <div id="paymentHistory">
+
+                <p class="empty">
+                    Loading payment history...
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+<script>
+
+const token = localStorage.getItem("token");
+
+
+if (!token) {
+
+    window.location.href = "../login.html";
+
+}
+
+
+// ============================================================
+// LOAD CAMPAIGNS
+// ============================================================
+
+async function loadCampaigns() {
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:5000/api/campaigns",
+            {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        const select =
+            document.getElementById("campaignSelect");
+
+
+        select.innerHTML =
+            '<option value="">Select a campaign</option>';
+
+
+        if (
+            !data.campaigns ||
+            data.campaigns.length === 0
+        ) {
+
+            select.innerHTML =
+                '<option value="">No campaigns found</option>';
+
+            return;
+
+        }
+
+
+        data.campaigns.forEach(campaign => {
+
+            const option =
+                document.createElement("option");
+
+
+            option.value = campaign.id;
+
+
+            option.textContent =
+                `${campaign.name} — ₹${campaign.budget || 0}`;
+
+
+            select.appendChild(option);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            "Failed to load campaigns",
+            "error"
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// MAKE DEMO PAYMENT
+// ============================================================
+
+async function makePayment() {
+
+    const campaignId =
+        document.getElementById("campaignSelect").value;
+
+
+    const amount =
+        document.getElementById("amount").value;
+
+
+    if (!campaignId) {
+
+        showMessage(
+            "Please select a campaign",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!amount || Number(amount) <= 0) {
+
+        showMessage(
+            "Please enter a valid payment amount",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById("payButton");
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Processing...";
+
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:5000/api/payments",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+
+                body: JSON.stringify({
+
+                    campaignId: campaignId,
+
+                    amount: Number(amount)
+
+                })
+
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message || "Payment failed"
+            );
+
+        }
+
+
+        showMessage(
+            "Demo payment successful! Payment recorded.",
+            "success"
+        );
+
+
+        document.getElementById("amount").value = "";
+
+
+        await loadPayments();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "Pay Now (Demo)";
+
+}
+
+
+// ============================================================
+// LOAD PAYMENT HISTORY
+// ============================================================
+
+async function loadPayments() {
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:5000/api/payments",
+            {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        const container =
+            document.getElementById("paymentHistory");
+
+
+        if (
+            !data.payments ||
+            data.payments.length === 0
+        ) {
+
+            container.innerHTML =
+                '<p class="empty">No payments yet.</p>';
+
+            return;
+
+        }
+
+
+        let html = `
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Campaign</th>
+
+                        <th>Amount</th>
+
+                        <th>Status</th>
+
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+        `;
+
+
+        data.payments.forEach(payment => {
+
+            const date =
+                new Date(
+                    payment.created_at
+                ).toLocaleString();
+
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        ${payment.campaign_name || "Campaign"}
+                    </td>
+
+                    <td>
+                        ₹${Number(payment.amount).toFixed(2)}
+                    </td>
+
+                    <td>
+
+                        <span class="status paid">
+                            ${payment.status}
+                        </span>
+
+                    </td>
+
+                    <td>
+                        ${date}
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        html += `
+
+                </tbody>
+
+            </table>
+
+        `;
+
+
+        container.innerHTML = html;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "paymentHistory"
+        ).innerHTML =
+            '<p class="empty">Failed to load payments.</p>';
+
+    }
+
+}
+
+
+// ============================================================
+// MESSAGE
+// ============================================================
+
+function showMessage(text, type) {
+
+    const message =
+        document.getElementById("message");
+
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+
+    message.style.display = "block";
+
+}
+
+
+// ============================================================
+// LOGOUT
+// ============================================================
+
+function logout() {
+
+    localStorage.removeItem("token");
+
+    window.location.href =
+        "../login.html";
+
+}
+
+
+// ============================================================
+// INITIAL LOAD
+// ============================================================
+
+loadCampaigns();
+
+loadPayments();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1126 @@
+/* =========================================================
+   LOCALREACH HOME PAGE
+   Warm dark + orange advertising theme
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background: #160D08;
+    color: #FFF8F2;
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    width: 100%;
+
+    background: rgba(22, 13, 8, 0.94);
+    border-bottom: 1px solid #3A2920;
+
+    backdrop-filter: blur(12px);
+}
+
+.nav-container {
+    width: min(1180px, 92%);
+    margin: auto;
+
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -0.7px;
+
+    color: #FFF8F2;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+}
+
+.nav-links a {
+    color: #B9AAA0;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: #FFFFFF;
+}
+
+.login-link {
+    padding: 10px 20px;
+
+    border: 1px solid #4A372B;
+    border-radius: 8px;
+
+    color: #FFFFFF;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.login-link:hover {
+    background: #26170F;
+    border-color: #6A4B39;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    min-height: 690px;
+
+    display: flex;
+    align-items: center;
+
+    position: relative;
+    overflow: hidden;
+
+    border-bottom: 1px solid #35251C;
+
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(255, 138, 36, 0.13),
+            transparent 36%
+        ),
+        #160D08;
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 620px;
+    height: 620px;
+
+    top: 60px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: rgba(255, 138, 36, 0.055);
+
+    filter: blur(100px);
+
+    pointer-events: none;
+}
+
+.hero-content {
+    width: min(900px, 92%);
+
+    margin: auto;
+
+    position: relative;
+    z-index: 1;
+
+    text-align: center;
+}
+
+.hero-badge {
+    display: inline-block;
+
+    margin-bottom: 24px;
+    padding: 7px 14px;
+
+    border: 1px solid #55331D;
+    border-radius: 999px;
+
+    background: #24130A;
+
+    color: #FF9A45;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    max-width: 900px;
+    margin: auto;
+
+    font-size: clamp(46px, 7vw, 82px);
+
+    line-height: 0.98;
+
+    letter-spacing: -3.5px;
+
+    font-weight: 800;
+
+    color: #FFF8F2;
+}
+
+.hero h1 span {
+    display: block;
+
+    margin-top: 12px;
+
+    color: #FF8A24;
+}
+
+.hero-description {
+    max-width: 650px;
+
+    margin: 30px auto 0;
+
+    color: #B9AAA0;
+
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.hero-buttons {
+    margin-top: 36px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 14px;
+
+    flex-wrap: wrap;
+}
+
+.btn {
+    min-width: 190px;
+
+    padding: 14px 24px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: #FF8A24;
+    color: #FFFFFF;
+
+    border: 1px solid #FF8A24;
+
+    box-shadow:
+        0 8px 25px rgba(255, 138, 36, 0.14);
+}
+
+.btn-primary:hover {
+    background: #FFA04A;
+    border-color: #FFA04A;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #FFF8F2;
+
+    border: 1px solid #4A372B;
+}
+
+.btn-secondary:hover {
+    background: #26170F;
+    border-color: #6A4B39;
+}
+
+.hero-note {
+    margin-top: 18px;
+
+    color: #786A61;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.stats-section {
+    border-bottom: 1px solid #35251C;
+
+    background: #1C100A;
+}
+
+.stats-container {
+    width: min(1180px, 92%);
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.stat {
+    padding: 42px 25px;
+
+    text-align: center;
+
+    border-right: 1px solid #3A2920;
+}
+
+.stat:last-child {
+    border-right: none;
+}
+
+.stat h2 {
+    margin-bottom: 4px;
+
+    font-size: 30px;
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+    color: #FF8A24;
+}
+
+.stat p {
+    color: #95867C;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   GENERAL SECTIONS
+   ========================================================= */
+
+.section {
+    padding: 110px 0;
+
+    border-bottom: 1px solid #35251C;
+
+    background: #160D08;
+}
+
+.section-container {
+    width: min(1180px, 92%);
+    margin: auto;
+}
+
+.section-heading {
+    max-width: 680px;
+
+    margin-bottom: 55px;
+}
+
+.section-heading.center {
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align: center;
+}
+
+.section-label {
+    display: inline-block;
+
+    margin-bottom: 14px;
+
+    color: #FF8A24;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.section-heading h2 {
+    margin-bottom: 14px;
+
+    font-size: clamp(34px, 5vw, 52px);
+
+    line-height: 1.05;
+
+    letter-spacing: -2px;
+
+    font-weight: 800;
+
+    color: #FFF8F2;
+}
+
+.section-heading p {
+    color: #95867C;
+
+    font-size: 16px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   HOW IT WORKS
+   ========================================================= */
+
+.steps-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.step-card {
+    min-height: 260px;
+
+    padding: 32px;
+
+    border: 1px solid #3A2920;
+    border-radius: 12px;
+
+    background: #21140D;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.step-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #60432E;
+
+    background: #26170F;
+}
+
+.step-icon {
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #2A180C;
+
+    color: #FF8A24;
+
+    font-size: 21px;
+
+    border: 1px solid #4D2D19;
+}
+
+.step-card h3 {
+    margin-bottom: 10px;
+
+    font-size: 21px;
+
+    color: #FFF8F2;
+}
+
+.step-card p {
+    color: #95867C;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   PLANS
+   ========================================================= */
+
+.plans-section {
+    background: #1A0F09;
+}
+
+.plans-grid {
+    max-width: 850px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+.plan-card {
+    position: relative;
+
+    padding: 34px;
+
+    border: 1px solid #3A2920;
+    border-radius: 13px;
+
+    background: #21140D;
+}
+
+.plan-card.featured {
+    border-color: #FF8A24;
+
+    background:
+        linear-gradient(
+            180deg,
+            #2A170C 0%,
+            #21140D 100%
+        );
+
+    box-shadow:
+        0 15px 45px rgba(255, 138, 36, 0.08);
+}
+
+.popular-badge {
+    position: absolute;
+
+    top: -12px;
+    right: 24px;
+
+    padding: 5px 10px;
+
+    border-radius: 5px;
+
+    background: #FF8A24;
+
+    color: #FFFFFF;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+}
+
+.plan-top h3 {
+    margin-bottom: 5px;
+
+    font-size: 23px;
+
+    color: #FFF8F2;
+}
+
+.plan-top p {
+    color: #95867C;
+
+    font-size: 13px;
+}
+
+.plan-price {
+    margin: 30px 0;
+
+    display: flex;
+    align-items: baseline;
+
+    gap: 7px;
+}
+
+.plan-price strong {
+    font-size: 38px;
+
+    letter-spacing: -1.5px;
+
+    color: #FFF8F2;
+}
+
+.plan-price span {
+    color: #85766C;
+
+    font-size: 13px;
+}
+
+.plan-card ul {
+    list-style: none;
+
+    margin-bottom: 30px;
+}
+
+.plan-card li {
+    padding: 9px 0;
+
+    color: #B9AAA0;
+
+    font-size: 14px;
+
+    border-bottom: 1px solid #38271E;
+}
+
+.plan-card li:last-child {
+    border-bottom: none;
+}
+
+.plan-button {
+    display: block;
+
+    width: 100%;
+
+    padding: 13px;
+
+    text-align: center;
+
+    border-radius: 7px;
+
+    border: 1px solid #49352A;
+
+    background: #28180F;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    color: #FFF8F2;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.plan-button:hover {
+    background: #332015;
+
+    border-color: #654938;
+
+    transform: translateY(-1px);
+}
+
+.featured .plan-button {
+    background: #FF8A24;
+
+    border-color: #FF8A24;
+
+    color: #FFFFFF;
+}
+
+.featured .plan-button:hover {
+    background: #FFA04A;
+
+    border-color: #FFA04A;
+}
+
+
+/* =========================================================
+   CAMPAIGN EXAMPLE
+   ========================================================= */
+
+.campaign-card {
+    padding: 32px;
+
+    border: 1px solid #3A2920;
+    border-radius: 13px;
+
+    background: #21140D;
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
+.campaign-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid #38271E;
+}
+
+.small-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #796B61;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.campaign-header h3 {
+    font-size: 21px;
+
+    color: #FFF8F2;
+}
+
+.campaign-status {
+    padding: 6px 11px;
+
+    border: 1px solid #35513A;
+    border-radius: 6px;
+
+    background: #122016;
+
+    color: #7FD18E;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.campaign-stats {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    padding-top: 28px;
+}
+
+.campaign-stats div {
+    padding-right: 20px;
+
+    border-right: 1px solid #38271E;
+}
+
+.campaign-stats div:not(:first-child) {
+    padding-left: 25px;
+}
+
+.campaign-stats div:last-child {
+    border-right: none;
+}
+
+.campaign-stats strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 25px;
+
+    letter-spacing: -0.8px;
+
+    color: #FF8A24;
+}
+
+.campaign-stats span {
+    color: #85766C;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   VENUES
+   ========================================================= */
+
+.venues-section {
+    background: #1A0F09;
+}
+
+.venues-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 14px;
+}
+
+.venue-card {
+    padding: 25px;
+
+    border: 1px solid #3A2920;
+    border-radius: 10px;
+
+    background: #21140D;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.venue-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #60432E;
+
+    background: #26170F;
+}
+
+.venue-card h3 {
+    margin-bottom: 4px;
+
+    font-size: 17px;
+
+    color: #FFF8F2;
+}
+
+.venue-card p {
+    margin-bottom: 15px;
+
+    color: #85766C;
+
+    font-size: 13px;
+}
+
+.venue-card span {
+    color: #B9AAA0;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   FINAL CTA
+   ========================================================= */
+
+.final-cta {
+    padding: 120px 20px;
+
+    text-align: center;
+
+    position: relative;
+    overflow: hidden;
+
+    border-bottom: 1px solid #35251C;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255, 138, 36, 0.14),
+            transparent 45%
+        ),
+        #160D08;
+}
+
+.cta-container {
+    width: min(720px, 92%);
+
+    margin: auto;
+}
+
+.final-cta h2 {
+    margin-bottom: 18px;
+
+    font-size: clamp(40px, 6vw, 62px);
+
+    line-height: 1;
+
+    letter-spacing: -2.5px;
+
+    color: #FFF8F2;
+}
+
+.final-cta p {
+    max-width: 560px;
+
+    margin: auto;
+
+    color: #95867C;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    background: #100805;
+}
+
+.footer-container {
+    width: min(1180px, 92%);
+
+    margin: auto;
+
+    padding: 50px 0;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 40px;
+}
+
+.footer strong {
+    font-size: 19px;
+
+    color: #FFF8F2;
+}
+
+.footer p {
+    margin-top: 6px;
+
+    color: #706158;
+
+    font-size: 12px;
+}
+
+.footer-links {
+    display: flex;
+
+    gap: 25px;
+
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: #85766C;
+
+    font-size: 12px;
+
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #FF8A24;
+}
+
+.footer-bottom {
+    padding: 18px 20px;
+
+    border-top: 1px solid #2B1E17;
+
+    text-align: center;
+
+    color: #5F5149;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .nav-links {
+        display: none;
+    }
+
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat:nth-child(2) {
+        border-right: none;
+    }
+
+    .stat:nth-child(3),
+    .stat:nth-child(4) {
+        border-top: 1px solid #3A2920;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .step-card {
+        min-height: auto;
+    }
+
+    .plans-grid {
+        grid-template-columns: 1fr;
+
+        max-width: 600px;
+    }
+
+    .campaign-stats {
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 25px;
+    }
+
+    .campaign-stats div:nth-child(2) {
+        border-right: none;
+    }
+
+    .campaign-stats div:nth-child(3),
+    .campaign-stats div:nth-child(4) {
+        padding-top: 20px;
+
+        border-top: 1px solid #38271E;
+    }
+
+    .campaign-stats div:nth-child(3) {
+        padding-left: 0;
+    }
+
+    .campaign-stats div:nth-child(4) {
+        padding-left: 25px;
+    }
+
+    .venues-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .nav-container {
+        min-height: 68px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .login-link {
+        padding: 8px 15px;
+    }
+
+    .hero {
+        min-height: 620px;
+    }
+
+    .hero h1 {
+        font-size: 46px;
+
+        letter-spacing: -2px;
+    }
+
+    .hero-description {
+        font-size: 15px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+
+        max-width: 320px;
+    }
+
+    .section {
+        padding: 75px 0;
+    }
+
+    .section-heading {
+        margin-bottom: 38px;
+    }
+
+    .section-heading h2 {
+        font-size: 36px;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat {
+        padding: 30px 10px;
+    }
+
+    .stat h2 {
+        font-size: 23px;
+    }
+
+    .stat p {
+        font-size: 11px;
+    }
+
+    .step-card {
+        padding: 25px;
+    }
+
+    .plan-card {
+        padding: 27px;
+    }
+
+    .campaign-card {
+        padding: 22px;
+    }
+
+    .campaign-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .campaign-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .campaign-stats div,
+    .campaign-stats div:nth-child(2),
+    .campaign-stats div:nth-child(3),
+    .campaign-stats div:nth-child(4) {
+        padding: 18px 0;
+
+        border-right: none;
+        border-top: 1px solid #38271E;
+    }
+
+    .campaign-stats div:first-child {
+        border-top: none;
+    }
+
+    .footer-container {
+        flex-direction: column;
+    }
+
+    .footer-links {
+        gap: 15px;
+    }
+
+}

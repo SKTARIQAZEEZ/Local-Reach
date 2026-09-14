@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Campaign - LocalReach</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #64748b;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dbe2ea;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        #message {
+            margin-top: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <!-- =========================================
+     ADVERTISER NAVIGATION
+========================================= -->
+
+<aside class="lr-sidebar">
+
+    <div class="lr-logo">
+        LocalReach
+    </div>
+
+    <a href="dashboard.html" class="lr-nav-link">
+        🏠 Dashboard
+    </a>
+
+    <a href="business.html" class="lr-nav-link">
+        🏢 Business
+    </a>
+
+    <a href="advertisements.html" class="lr-nav-link">
+        📢 Advertisements
+    </a>
+
+    <a href="campaigns.html" class="lr-nav-link">
+        📋 Campaigns
+    </a>
+
+    <a href="create-campaign.html" class="lr-nav-link">
+        ➕ Create Campaign
+    </a>
+
+    <a href="screens.html" class="lr-nav-link">
+        🖥️ Screens
+    </a>
+
+    <a href="analytics.html" class="lr-nav-link">
+        📊 Analytics
+    </a>
+
+    <a href="../notifications.html" class="lr-nav-link">
+        🔔 Notifications
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH ADVERTISER NAVIGATION
+    ========================================= */
+
+    .lr-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-nav-link.lr-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+       The correct option stays highlighted
+       on every advertiser page.
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(".lr-nav-link")
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+    <div class="container">
+
+        <div class="header">
+
+            <h1>Create Campaign</h1>
+
+            <p>
+                Create a new advertising campaign for your business.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <form id="campaignForm">
+
+                <div class="form-group">
+
+                    <label for="campaignName">
+                        Campaign Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="campaignName"
+                        placeholder="Example: Summer Promotion"
+                        required
+                    >
+
+                </div>
+
+               
+
+                <div class="form-group">
+
+                    <label for="adTitle">
+                        Advertisement Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="adTitle"
+                        placeholder="Example: Summer Sale"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="startDate">
+                            Start Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="startDate"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="endDate">
+                            End Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="endDate"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="targetCity">
+                            Target City
+                        </label>
+
+                        <input
+                            type="text"
+                            id="targetCity"
+                            placeholder="Example: Kurnool"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+    <label for="targetArea">
+        Target Area
+    </label>
+
+    <input
+        type="text"
+        id="targetArea"
+        placeholder="Example: Brodipet"
+    >
+
+</div>
+
+
+<div class="form-row">
+
+    <div class="form-group">
+
+        <label for="radiusKm">
+            Target Radius (km)
+        </label>
+
+        <input
+            type="number"
+            id="radiusKm"
+            min="0"
+            step="0.1"
+            placeholder="Example: 5"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="targetLatitude">
+            Target Latitude
+        </label>
+
+        <input
+            type="number"
+            id="targetLatitude"
+            step="0.0000001"
+            placeholder="Example: 16.3067"
+        >
+
+    </div>
+
+</div>
+
+
+<div class="form-group">
+
+    <label for="targetLongitude">
+        Target Longitude
+    </label>
+
+    <input
+        type="number"
+        id="targetLongitude"
+        step="0.0000001"
+        placeholder="Example: 80.4365"
+    >
+
+</div>
+
+
+<div class="form-group">
+
+    <label for="budget">
+        Campaign Budget (₹)
+    </label>
+                    <input
+                        type="number"
+                        id="budget"
+                        min="1"
+                        placeholder="Example: 1000"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="button"
+                >
+                    Create Campaign
+                </button>
+
+                <p id="message"></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        document
+    .getElementById("campaignForm")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const token = localStorage.getItem("token");
+        const message = document.getElementById("message");
+
+        if (!token) {
+
+            message.textContent = "Please login first.";
+
+            return;
+        }
+
+
+        const campaignData = {
+
+    name: document.getElementById("campaignName").value,
+
+    advertisementTitle:
+        document.getElementById("adTitle").value,
+
+    startDate:
+        document.getElementById("startDate").value,
+
+    endDate:
+        document.getElementById("endDate").value,
+
+    targetCity:
+        document.getElementById("targetCity").value,
+
+    targetArea:
+        document.getElementById("targetArea").value,
+
+    radiusKm:
+        document.getElementById("radiusKm").value,
+
+    targetLatitude:
+        document.getElementById("targetLatitude").value,
+
+    targetLongitude:
+        document.getElementById("targetLongitude").value,
+
+    budget:
+        document.getElementById("budget").value
+
+};
+
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:5000/api/campaigns",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+
+                    body: JSON.stringify(campaignData)
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok) {
+
+                message.textContent = data.message;
+
+                return;
+            }
+
+
+            message.textContent =
+                "Campaign created successfully!";
+
+            console.log("Campaign:", data.campaign);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.textContent =
+                "Unable to connect to server.";
+
+        }
+
+    });
+
+    </script>
+
+</body>
+
+</html>

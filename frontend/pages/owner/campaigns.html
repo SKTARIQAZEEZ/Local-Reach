@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Campaigns - LocalReach</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: #111827;
+            color: white;
+
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+
+            margin-bottom: 35px;
+            padding-left: 10px;
+        }
+
+        .nav-link {
+            display: block;
+
+            color: #d1d5db;
+            text-decoration: none;
+
+            padding: 13px 12px;
+            border-radius: 8px;
+
+            margin-bottom: 6px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #374151;
+            color: white;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #6b7280;
+            margin-top: 6px;
+        }
+
+        /* CAMPAIGN CARDS */
+
+        .campaigns {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(320px, 1fr));
+
+            gap: 20px;
+        }
+
+        .campaign-card {
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .campaign-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: flex-start;
+
+            margin-bottom: 20px;
+        }
+
+        .campaign-header h2 {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .advertiser {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            text-transform: capitalize;
+        }
+
+        .status.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.paused {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.completed {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .status.draft {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .status.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* DETAILS */
+
+        .details {
+            border-top: 1px solid #e5e7eb;
+
+            padding-top: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 9px 0;
+
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: #6b7280;
+        }
+
+        .detail-value {
+            font-weight: 600;
+
+            text-align: right;
+        }
+
+        /* EMPTY / ERROR */
+
+        .message {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            color: #6b7280;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .error {
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            padding: 15px;
+
+            border-radius: 8px;
+        }
+
+        @media (max-width: 900px) {
+
+            .campaigns {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                padding: 20px;
+            }
+
+        }
+
+        /* SIDEBAR */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: #111827;
+    padding: 30px 18px;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.sidebar .logo {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0 0 45px 12px;
+}
+
+.sidebar a {
+    display: block;
+    color: #f3f4f6;
+    text-decoration: none;
+    padding: 15px 18px;
+    margin-bottom: 8px;
+    border-radius: 9px;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.sidebar a:hover {
+    background: #374151;
+}
+
+.sidebar a.active {
+    background: #374151;
+    color: white;
+    font-weight: bold;
+}
+
+/* MAIN CONTENT */
+.main {
+    margin-left: 280px;
+    width: calc(100% - 280px);
+    min-height: 100vh;
+    padding: 45px;
+    box-sizing: border-box;
+}
+
+/* MOBILE */
+@media (max-width: 800px) {
+    .sidebar {
+        width: 220px;
+    }
+
+    .main {
+        margin-left: 220px;
+        width: calc(100% - 220px);
+        padding: 25px;
+    }
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+     SCREEN OWNER NAVIGATION
+========================================= -->
+
+<aside class="lr-owner-sidebar">
+
+    <div class="lr-owner-logo">
+        LocalReach
+    </div>
+
+    <a
+        href="dashboard.html"
+        class="lr-owner-nav-link"
+    >
+        🏠 Dashboard
+    </a>
+
+    <a
+        href="screens.html"
+        class="lr-owner-nav-link"
+    >
+        🖥️ My Screens
+    </a>
+
+    <a
+        href="campaigns.html"
+        class="lr-owner-nav-link"
+    >
+        📋 Campaigns
+    </a>
+
+    <a
+        href="earnings.html"
+        class="lr-owner-nav-link"
+    >
+        💰 Earnings
+    </a>
+
+    <a
+        href="analytics.html"
+        class="lr-owner-nav-link"
+    >
+        📊 Analytics
+    </a>
+
+    <a
+        href="payouts.html"
+        class="lr-owner-nav-link"
+    >
+        💳 Payouts
+    </a>
+
+    <a
+        href="../notifications.html"
+        class="lr-owner-nav-link"
+    >
+        🔔 Notifications
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-owner-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH OWNER NAVIGATION
+    ========================================= */
+
+    .lr-owner-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-owner-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-owner-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-owner-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-owner-nav-link.lr-owner-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-owner-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(
+                ".lr-owner-nav-link"
+            )
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-owner-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+
+        <div class="header">
+
+            <h1>
+                Campaigns
+            </h1>
+
+            <p>
+                Campaigns currently running on your screens.
+            </p>
+
+        </div>
+
+
+        <div
+            id="campaignsContainer"
+            class="campaigns"
+        >
+
+            <div class="message">
+                Loading campaigns...
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+
+<script>
+
+
+const token =
+    localStorage.getItem("token");
+
+
+
+/* ============================================================
+   AUTH CHECK
+============================================================ */
+
+if (!token) {
+
+    window.location.href =
+        "../login.html";
+
+}
+
+
+
+/* ============================================================
+   LOAD OWNER CAMPAIGNS
+============================================================ */
+
+async function loadCampaigns() {
+
+    try {
+
+        const response =
+            await fetch(
+                "http://localhost:5000/api/owner/campaigns",
+                {
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Failed to load campaigns"
+            );
+
+        }
+
+
+        displayCampaigns(
+            data.campaigns || []
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Campaign loading error:",
+            error
+        );
+
+
+        document.getElementById(
+            "campaignsContainer"
+        ).innerHTML = `
+
+            <div class="error">
+
+                Failed to load campaigns.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* ============================================================
+   DISPLAY CAMPAIGNS
+============================================================ */
+
+function displayCampaigns(campaigns) {
+
+    const container =
+        document.getElementById(
+            "campaignsContainer"
+        );
+
+
+    if (
+        !campaigns ||
+        campaigns.length === 0
+    ) {
+
+        container.className =
+            "message";
+
+        container.innerHTML = `
+            No campaigns are connected
+            to your screens yet.
+        `;
+
+        return;
+
+    }
+
+
+    container.className =
+        "campaigns";
+
+
+    container.innerHTML = "";
+
+
+    campaigns.forEach(campaign => {
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "campaign-card";
+
+
+        const status =
+            String(
+                campaign.status || "draft"
+            ).toLowerCase();
+
+
+        card.innerHTML = `
+
+            <div class="campaign-header">
+
+                <div>
+
+                    <h2>
+                        ${campaign.campaign_name}
+                    </h2>
+
+                    <div class="advertiser">
+
+                        Advertiser:
+                        ${campaign.advertiser_name || "-"}
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    class="status ${status}"
+                >
+                    ${campaign.status}
+                </span>
+
+            </div>
+
+
+            <div class="details">
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Screen
+                    </span>
+
+                    <span class="detail-value">
+                        ${campaign.screen_name || "-"}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Screen ID
+                    </span>
+
+                    <span class="detail-value">
+                        ${campaign.screen_id || "-"}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Start Date
+                    </span>
+
+                    <span class="detail-value">
+                        ${campaign.start_date || "-"}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        End Date
+                    </span>
+
+                    <span class="detail-value">
+                        ${campaign.end_date || "-"}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Plays
+                    </span>
+
+                    <span class="detail-value">
+                        ${campaign.total_plays || 0}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Verified Plays
+                    </span>
+
+                    <span class="detail-value">
+                        ${campaign.verified_plays || 0}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span class="detail-label">
+                        Screen Earnings
+                    </span>
+
+                    <span class="detail-value">
+                        ₹${Number(
+                            campaign.earnings || 0
+                        ).toFixed(2)}
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+
+/* ============================================================
+   LOGOUT
+============================================================ */
+
+function logout() {
+
+    localStorage.removeItem("token");
+
+    window.location.href =
+        "../login.html";
+
+}
+
+function openProfile(event) {
+    event.preventDefault();
+
+    const user = JSON.parse(
+        localStorage.getItem("user") || "{}"
+    );
+
+    alert(
+        "Profile\n\n" +
+        "Name: " + (user.full_name || "-") + "\n" +
+        "Email: " + (user.email || "-") + "\n" +
+        "Phone: " + (user.phone || "-") + "\n" +
+        "Role: " + (user.role || "-")
+    );
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    window.location.href = "../login.html";
+}
+
+/* ============================================================
+   INITIAL LOAD
+============================================================ */
+
+loadCampaigns();
+
+
+</script>
+
+
+</body>
+
+</html>

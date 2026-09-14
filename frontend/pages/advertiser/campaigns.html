@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Campaigns - LocalReach</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ============================================================
+           SIDEBAR
+        ============================================================ */
+
+        .sidebar {
+            width: 240px;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-left: 15px;
+        }
+
+        .nav a {
+            display: block;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 13px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
+
+        .nav a:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ============================================================
+           MAIN
+        ============================================================ */
+
+        .main {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+        }
+
+        .user {
+            font-weight: bold;
+        }
+
+        /* ============================================================
+           HEADER
+        ============================================================ */
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+            margin-top: 6px;
+        }
+
+        .create-btn {
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .create-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* ============================================================
+           TABLE
+        ============================================================ */
+
+        .campaign-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            background: #f7f9fc;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ============================================================
+           STATUS
+        ============================================================ */
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .status.draft {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.paused {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .status.completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ============================================================
+           ACTION BUTTONS
+        ============================================================ */
+
+        .action-btn {
+            display: inline-block;
+            padding: 7px 12px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 3px 3px 3px 0;
+        }
+
+        .view-btn {
+            background: #2563eb;
+        }
+
+        .edit-btn {
+            background: #2563eb;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+        }
+
+        .submit-btn {
+            background: #2563eb;
+        }
+
+        .pause-btn {
+            background: #dc2626;
+        }
+
+        .pay-btn {
+            background: #16a34a;
+        }
+
+        .manage-btn {
+            background: #7c3aed;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* ============================================================
+           INFO / PAYMENT
+        ============================================================ */
+
+        .waiting-text {
+            color: #92400e;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .rejected-text {
+            color: #991b1b;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .completed-text {
+            color: #1e40af;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .paid-text {
+            color: #166534;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* ============================================================
+           EMPTY
+        ============================================================ */
+
+        .empty-message {
+            text-align: center;
+            padding: 50px 20px;
+            color: #6b7280;
+        }
+
+        .empty-message h2 {
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        /* ============================================================
+           MOBILE
+        ============================================================ */
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="layout">
+
+        <!-- =========================================
+     ADVERTISER NAVIGATION
+========================================= -->
+
+<aside class="lr-sidebar">
+
+    <div class="lr-logo">
+        LocalReach
+    </div>
+
+    <a href="dashboard.html" class="lr-nav-link">
+        🏠 Dashboard
+    </a>
+
+    <a href="business.html" class="lr-nav-link">
+        🏢 Business
+    </a>
+
+    <a href="advertisements.html" class="lr-nav-link">
+        📢 Advertisements
+    </a>
+
+    <a href="campaigns.html" class="lr-nav-link">
+        📋 Campaigns
+    </a>
+
+    <a href="create-campaign.html" class="lr-nav-link">
+        ➕ Create Campaign
+    </a>
+
+    <a href="screens.html" class="lr-nav-link">
+        🖥️ Screens
+    </a>
+
+    <a href="analytics.html" class="lr-nav-link">
+        📊 Analytics
+    </a>
+
+    <a href="../notifications.html" class="lr-nav-link">
+        🔔 Notifications
+    </a>
+
+    <a
+        href="../login.html"
+        class="lr-nav-link"
+        onclick="logout()"
+    >
+        🚪 Logout
+    </a>
+
+</aside>
+
+
+<style>
+
+    /* =========================================
+       LOCALREACH ADVERTISER NAVIGATION
+    ========================================= */
+
+    .lr-sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+        bottom: 0;
+
+        width: 240px;
+
+        background: #111827;
+
+        padding: 25px 15px;
+
+        overflow-y: auto;
+
+        z-index: 1000;
+    }
+
+
+    .lr-logo {
+        color: white;
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        padding: 0 10px;
+
+        margin-bottom: 30px;
+    }
+
+
+    .lr-nav-link {
+        display: block;
+
+        color: #d1d5db;
+
+        text-decoration: none;
+
+        padding: 12px 15px;
+
+        margin-bottom: 6px;
+
+        border-radius: 7px;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+
+    .lr-nav-link:hover {
+        background: #374151;
+
+        color: white;
+    }
+
+
+    .lr-nav-link.lr-active {
+        background: #2563eb;
+
+        color: white;
+    }
+
+
+    @media (max-width: 900px) {
+
+        .lr-sidebar {
+            position: relative;
+
+            width: 100%;
+
+            height: auto;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+    /* =========================================
+       AUTOMATIC ACTIVE MENU
+       The correct option stays highlighted
+       on every advertiser page.
+    ========================================= */
+
+    (function () {
+
+        const currentPage =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
+
+        document
+            .querySelectorAll(".lr-nav-link")
+            .forEach(function (link) {
+
+                const href =
+                    link.getAttribute("href");
+
+                if (!href) {
+                    return;
+                }
+
+
+                const linkPage =
+                    href
+                        .split("/")
+                        .pop()
+                        .split("?")[0]
+                        .toLowerCase();
+
+
+                if (
+                    linkPage === currentPage
+                ) {
+
+                    link.classList.add(
+                        "lr-active"
+                    );
+
+                }
+
+            });
+
+    })();
+
+</script>
+
+
+        <!-- ========================================================
+             MAIN CONTENT
+        ========================================================= -->
+
+        <main class="main">
+
+            <div class="topbar">
+
+                <h1>
+                    Campaigns
+                </h1>
+
+                <div class="user">
+
+                    Welcome,
+                    <span id="userName">
+                        User
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        My Campaigns
+                    </h2>
+
+                    <p>
+                        Manage and track your advertising campaigns.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="create-campaign.html"
+                    class="create-btn"
+                >
+                    + Create Campaign
+                </a>
+
+            </div>
+
+
+            <!-- ====================================================
+                 CAMPAIGN TABLE
+            ===================================================== -->
+
+            <div class="campaign-card">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Campaign
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Start Date
+                            </th>
+
+                            <th>
+                                End Date
+                            </th>
+
+                            <th>
+                                Budget
+                            </th>
+
+                            <th>
+                                Target
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="campaignTableBody">
+
+                        <tr>
+
+                            <td colspan="7">
+
+                                <div class="empty-message">
+
+                                    <h2>
+                                        Loading campaigns...
+                                    </h2>
+
+                                    <p>
+                                        Please wait.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- ============================================================
+         JAVASCRIPT
+    ============================================================= -->
+
+    <script>
+
+        /* ============================================================
+           USER
+        ============================================================ */
+
+        const user =
+            JSON.parse(
+                localStorage.getItem("user") || "null"
+            );
+
+
+        const token =
+            localStorage.getItem("token");
+
+
+        if (!token || !user) {
+
+            window.location.href =
+                "../login.html";
+
+        }
+
+
+        if (user) {
+
+            document.getElementById(
+                "userName"
+            ).textContent =
+                user.full_name || "User";
+
+        }
+
+
+        /* ============================================================
+           LOGOUT
+        ============================================================ */
+
+        function logout() {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            localStorage.removeItem(
+                "user"
+            );
+
+            window.location.href =
+                "../login.html";
+
+        }
+
+
+        /* ============================================================
+           DATE FORMAT
+        ============================================================ */
+
+        function formatDate(
+            dateString
+        ) {
+
+            if (!dateString) {
+
+                return "-";
+
+            }
+
+
+            const date =
+                new Date(
+                    dateString
+                );
+
+
+            return date.toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+        }
+
+
+        /* ============================================================
+           LOAD PAYMENT HISTORY
+        ============================================================ */
+
+        async function loadPayments() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/payments",
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    console.warn(
+                        "Unable to load payment history"
+                    );
+
+                    return [];
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                return (
+                    data.payments ||
+                    []
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Payment history error:",
+                    error
+                );
+
+                return [];
+
+            }
+
+        }
+
+
+        /* ============================================================
+           CHECK IF CAMPAIGN IS PAID
+        ============================================================ */
+
+        function getPaidPayment(
+            campaignId,
+            payments
+        ) {
+
+            return payments.find(
+                function(payment) {
+
+                    return (
+
+                        String(
+                            payment.campaign_id || ""
+                        ) ===
+                        String(
+                            campaignId
+                        )
+
+                        &&
+
+                        String(
+                            payment.status || ""
+                        ).toLowerCase() ===
+                        "paid"
+
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* ============================================================
+           LOAD CAMPAIGNS
+        ============================================================ */
+
+        async function loadCampaigns() {
+
+            const tableBody =
+                document.getElementById(
+                    "campaignTableBody"
+                );
+
+
+            tableBody.innerHTML = `
+
+                <tr>
+
+                    <td colspan="7">
+
+                        <div class="empty-message">
+
+                            <h2>
+                                Loading campaigns...
+                            </h2>
+
+                            <p>
+                                Please wait.
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            try {
+
+                const campaignResponse =
+                    await fetch(
+                        "http://localhost:5000/api/campaigns",
+                        {
+                            method: "GET",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const campaignData =
+                    await campaignResponse.json();
+
+
+                if (!campaignResponse.ok) {
+
+                    throw new Error(
+                        campaignData.message ||
+                        "Failed to load campaigns"
+                    );
+
+                }
+
+
+                const campaigns =
+                    campaignData.campaigns ||
+                    [];
+
+
+                /*
+                    Payment history is loaded separately.
+
+                    If payment API is temporarily unavailable,
+                    campaigns still continue to display.
+                */
+
+                const payments =
+                    await loadPayments();
+
+
+                /* =================================================
+                   NO CAMPAIGNS
+                ================================================= */
+
+                if (
+                    campaigns.length === 0
+                ) {
+
+                    tableBody.innerHTML = `
+
+                        <tr>
+
+                            <td colspan="7">
+
+                                <div class="empty-message">
+
+                                    <h2>
+                                        No campaigns yet
+                                    </h2>
+
+                                    <p>
+                                        Create your first campaign
+                                        to start advertising.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                /* =================================================
+                   CLEAR TABLE
+                ================================================= */
+
+                tableBody.innerHTML = "";
+
+
+                /* =================================================
+                   RENDER EACH CAMPAIGN
+                ================================================= */
+
+                campaigns.forEach(
+                    function(campaign) {
+
+                        const row =
+                            document.createElement(
+                                "tr"
+                            );
+
+
+                        const paidPayment =
+                            getPaidPayment(
+                                campaign.id,
+                                payments
+                            );
+
+
+                        const isPaid =
+                            Boolean(
+                                paidPayment
+                            );
+
+
+                        /* ==========================================
+                           STATUS ACTION
+                        ========================================== */
+
+                        let statusAction =
+                            "";
+
+
+                        /*
+                            DRAFT
+                            -----
+                            Advertiser can submit for approval.
+                        */
+
+                        if (
+                            campaign.status ===
+                            "draft"
+                        ) {
+
+                            statusAction = `
+
+                                <button
+                                    class="action-btn submit-btn"
+                                    onclick="submitForApproval('${campaign.id}')"
+                                >
+                                    📤 Submit for Approval
+                                </button>
+
+                            `;
+
+                        }
+
+
+                        /*
+                            PENDING
+                            -------
+                            Waiting for admin.
+                        */
+
+                        else if (
+                            campaign.status ===
+                            "pending"
+                        ) {
+
+                            statusAction = `
+
+                                <div class="waiting-text">
+
+                                    ⏳ Waiting for Admin Approval
+
+                                </div>
+
+                            `;
+
+                        }
+
+
+                        /*
+                            ACTIVE
+                            ------
+                            Advertiser can pause.
+                        */
+
+                        else if (
+                            campaign.status ===
+                            "active"
+                        ) {
+
+                            statusAction = `
+
+                                <button
+                                    class="action-btn pause-btn"
+                                    onclick="pauseCampaign('${campaign.id}')"
+                                >
+                                    ⏸️ Pause
+                                </button>
+
+                            `;
+
+                        }
+
+
+                        /*
+                            PAUSED
+                            ------
+                            Re-submit for admin approval.
+                        */
+
+                        else if (
+                            campaign.status ===
+                            "paused"
+                        ) {
+
+                            statusAction = `
+
+                                <button
+                                    class="action-btn submit-btn"
+                                    onclick="submitForApproval('${campaign.id}')"
+                                >
+                                    📤 Submit for Approval
+                                </button>
+
+                            `;
+
+                        }
+
+
+                        /*
+                            REJECTED
+                        */
+
+                        else if (
+                            campaign.status ===
+                            "rejected"
+                        ) {
+
+                            statusAction = `
+
+                                <div class="rejected-text">
+
+                                    ❌ Campaign Rejected
+
+                                </div>
+
+                            `;
+
+                        }
+
+
+                        /*
+                            COMPLETED
+                        */
+
+                        else if (
+                            campaign.status ===
+                            "completed"
+                        ) {
+
+                            statusAction = `
+
+                                <div class="completed-text">
+
+                                    ✅ Campaign Completed
+
+                                </div>
+
+                            `;
+
+                        }
+
+
+                        /* ==========================================
+                           PAYMENT / BOOKING ACTION
+                        ========================================== */
+
+                        /* PAYMENT / BOOKING ACTION */
+
+let bookingAction = "";
+
+
+/* ==========================================
+   ACTIVE + UNPAID
+========================================== */
+
+if (
+    campaign.status === "active" &&
+    !isPaid
+) {
+
+    bookingAction = `
+
+        <div style="
+            display:flex;
+            flex-wrap:wrap;
+            gap:7px;
+            margin-top:7px;
+        ">
+
+            <a
+                href="campaign-details.html?id=${campaign.id}"
+                style="
+                    display:inline-block;
+                    padding:6px 12px;
+                    border-radius:6px;
+                    background:#16a34a;
+                    color:white;
+                    text-decoration:none;
+                    font-size:12px;
+                    font-weight:bold;
+                "
+            >
+                💳 Pay Now
+            </a>
+
+
+            <a
+                href="campaign-details.html?id=${campaign.id}"
+                style="
+                    display:inline-block;
+                    padding:6px 12px;
+                    border-radius:6px;
+                    background:#2563eb;
+                    color:white;
+                    text-decoration:none;
+                    font-size:12px;
+                    font-weight:bold;
+                "
+            >
+                📺 Manage Screens
+            </a>
+
+        </div>
+
+    `;
+}
+
+
+/* ==========================================
+   ACTIVE + PAID
+========================================== */
+
+else if (
+    campaign.status === "active" &&
+    isPaid
+) {
+
+    bookingAction = `
+
+        <div style="
+            color:#166534;
+            font-size:12px;
+            font-weight:bold;
+            margin-bottom:7px;
+        ">
+            ✅ Payment Completed
+        </div>
+
+
+        <a
+            href="campaign-details.html?id=${campaign.id}"
+            style="
+                display:inline-block;
+                padding:6px 12px;
+                border-radius:6px;
+                background:#2563eb;
+                color:white;
+                text-decoration:none;
+                font-size:12px;
+                font-weight:bold;
+            "
+        >
+            📺 Manage Screens
+        </a>
+
+    `;
+}
+
+                        /* ==========================================
+                           EDIT BUTTON
+                        ========================================== */
+
+                        let editButton =
+                            "";
+
+
+                        if (
+                            campaign.status !==
+                            "completed"
+
+                            &&
+
+                            campaign.status !==
+                            "rejected"
+                        ) {
+
+                            editButton = `
+
+                                <button
+                                    class="action-btn edit-btn"
+                                    onclick="editCampaign('${campaign.id}')"
+                                >
+                                    ✏️ Edit
+                                </button>
+
+                            `;
+
+                        }
+
+
+                        /* ==========================================
+                           DELETE BUTTON
+                        ========================================== */
+
+                        let deleteButton =
+                            "";
+
+
+                        if (
+                            campaign.status !==
+                            "completed"
+                        ) {
+
+                            deleteButton = `
+
+                                <button
+                                    class="action-btn delete-btn"
+                                    onclick="deleteCampaign('${campaign.id}')"
+                                >
+                                    🗑️ Delete
+                                </button>
+
+                            `;
+
+                        }
+
+
+                        /* ==========================================
+                           ROW
+                        ========================================== */
+
+                        row.innerHTML = `
+
+                            <!-- CAMPAIGN -->
+
+                            <td>
+
+                                <strong>
+                                    ${
+                                        campaign.name ||
+                                        "Unnamed Campaign"
+                                    }
+                                </strong>
+
+                                <br>
+
+                                <small>
+
+                                    ${
+                                        campaign.advertisement_title ||
+                                        "Advertisement"
+                                    }
+
+                                </small>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                <span
+                                    class="status ${
+                                        campaign.status ||
+                                        "draft"
+                                    }"
+                                >
+
+                                    ${
+                                        campaign.status ||
+                                        "draft"
+                                    }
+
+                                </span>
+
+                                <br><br>
+
+                                ${statusAction}
+
+                            </td>
+
+
+                            <!-- START DATE -->
+
+                            <td>
+
+                                ${
+                                    formatDate(
+                                        campaign.start_date
+                                    )
+                                }
+
+                            </td>
+
+
+                            <!-- END DATE -->
+
+                            <td>
+
+                                ${
+                                    formatDate(
+                                        campaign.end_date
+                                    )
+                                }
+
+                            </td>
+
+
+                            <!-- BUDGET -->
+
+                            <td>
+
+                                ₹${
+                                    Number(
+                                        campaign.budget ||
+                                        0
+                                    ).toFixed(2)
+                                }
+
+                            </td>
+
+
+                            <!-- TARGET -->
+
+                            <td>
+
+                                ${
+                                    campaign.target_city ||
+                                    "-"
+                                }
+
+                                ${
+                                    campaign.target_area
+                                        ? "<br>" +
+                                          campaign.target_area
+                                        : ""
+                                }
+
+                            </td>
+
+
+                            <!-- ACTIONS -->
+
+                            <td>
+
+                                <a
+                                    href="campaign-details.html?id=${campaign.id}"
+                                    class="action-btn view-btn"
+                                >
+                                    👁️ View Details
+                                </a>
+
+
+                                <br>
+
+
+                                ${editButton}
+
+
+                                ${deleteButton}
+
+
+                                <div
+                                    style="
+                                        margin-top:8px;
+                                    "
+                                >
+
+                                    ${bookingAction}
+
+                                </div>
+
+                            </td>
+
+                        `;
+
+
+                        tableBody.appendChild(
+                            row
+                        );
+
+                    }
+                );
+
+
+                console.log(
+                    "Campaigns loaded:",
+                    campaigns
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Error loading campaigns:",
+                    error
+                );
+
+
+                tableBody.innerHTML = `
+
+                    <tr>
+
+                        <td colspan="7">
+
+                            <div class="empty-message">
+
+                                <h2>
+                                    Unable to load campaigns
+                                </h2>
+
+                                <p>
+                                    ${error.message}
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        }
+
+
+        /* ============================================================
+           SUBMIT FOR APPROVAL
+        ============================================================ */
+
+        async function submitForApproval(
+            campaignId
+        ) {
+
+            const confirmed =
+                confirm(
+                    "Submit this campaign for admin approval?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `http://localhost:5000/api/campaigns/${campaignId}/status`,
+                        {
+                            method: "PATCH",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                "Authorization":
+                                    `Bearer ${token}`
+                            },
+
+                            body: JSON.stringify({
+
+                                status:
+                                    "pending"
+
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to submit campaign for approval"
+                    );
+
+                }
+
+
+                alert(
+                    data.message ||
+                    "Campaign submitted for admin approval"
+                );
+
+
+                await loadCampaigns();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Submit approval error:",
+                    error
+                );
+
+
+                alert(
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        /* ============================================================
+           PAUSE CAMPAIGN
+        ============================================================ */
+
+        async function pauseCampaign(
+            campaignId
+        ) {
+
+            const confirmed =
+                confirm(
+                    "Pause this active campaign?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `http://localhost:5000/api/campaigns/${campaignId}/status`,
+                        {
+                            method: "PATCH",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                "Authorization":
+                                    `Bearer ${token}`
+                            },
+
+                            body: JSON.stringify({
+
+                                status:
+                                    "paused"
+
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to pause campaign"
+                    );
+
+                }
+
+
+                alert(
+                    data.message ||
+                    "Campaign paused successfully"
+                );
+
+
+                await loadCampaigns();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Pause campaign error:",
+                    error
+                );
+
+
+                alert(
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        /* ============================================================
+           EDIT CAMPAIGN
+        ============================================================ */
+
+        function editCampaign(
+            campaignId
+        ) {
+
+            window.location.href =
+                `edit-campaign.html?id=${campaignId}`;
+
+        }
+
+
+        /* ============================================================
+           DELETE CAMPAIGN
+        ============================================================ */
+
+        async function deleteCampaign(
+            campaignId
+        ) {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to delete this campaign?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `http://localhost:5000/api/campaigns/${campaignId}`,
+                        {
+                            method: "DELETE",
+
+                            headers: {
+                                "Authorization":
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to delete campaign"
+                    );
+
+                }
+
+
+                alert(
+                    data.message ||
+                    "Campaign deleted successfully!"
+                );
+
+
+                await loadCampaigns();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Delete campaign error:",
+                    error
+                );
+
+
+                alert(
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        /* ============================================================
+           INITIAL LOAD
+        ============================================================ */
+
+        if (
+            token &&
+            user
+        ) {
+
+            loadCampaigns();
+
+        }
+
+    </script>
+
+</body>
+
+</html>
