@@ -746,7 +746,7 @@
 
                 const response =
                     await fetch(
-                        "http://localhost:5000/api/payments",
+                        "/api/payments",
                         {
                             method: "GET",
 
@@ -871,7 +871,7 @@
 
                 const campaignResponse =
                     await fetch(
-                        "http://localhost:5000/api/campaigns",
+                        "/api/campaigns",
                         {
                             method: "GET",
 
@@ -1528,7 +1528,7 @@ else if (
 
                 const response =
                     await fetch(
-                        `http://localhost:5000/api/campaigns/${campaignId}/status`,
+                        `/api/campaigns/${campaignId}/status`,
                         {
                             method: "PATCH",
 
@@ -1616,7 +1616,7 @@ else if (
 
                 const response =
                     await fetch(
-                        `http://localhost:5000/api/campaigns/${campaignId}/status`,
+                        `/api/campaigns/${campaignId}/status`,
                         {
                             method: "PATCH",
 
@@ -1718,7 +1718,7 @@ else if (
 
                 const response =
                     await fetch(
-                        `http://localhost:5000/api/campaigns/${campaignId}`,
+                        `/api/campaigns/${campaignId}`,
                         {
                             method: "DELETE",
 

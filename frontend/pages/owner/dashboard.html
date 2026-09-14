@@ -571,7 +571,7 @@ async function loadDashboard() {
          */
 
         const response = await fetch(
-            "http://localhost:5000/api/owner/dashboard",
+            "/api/owner/dashboard",
             {
                 headers: {
                     "Authorization":
@@ -778,7 +778,7 @@ async function loadNotificationCount() {
     try {
 
         const response = await fetch(
-            "http://localhost:5000/api/notifications/unread-count",
+            "/api/notifications/unread-count",
             {
                 method: "GET",
                 headers: {

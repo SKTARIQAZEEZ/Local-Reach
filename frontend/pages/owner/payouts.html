@@ -626,7 +626,7 @@ async function loadPayouts() {
 
         const response =
             await fetch(
-                "http://localhost:5000/api/owner/payouts",
+                "/api/owner/payouts",
                 {
                     headers: {
                         "Authorization":
@@ -865,7 +865,7 @@ async function requestPayout() {
     try {
 
         const response = await fetch(
-            "http://localhost:5000/api/owner/payouts",
+            "/api/owner/payouts",
             {
                 method: "POST",
                 headers: {

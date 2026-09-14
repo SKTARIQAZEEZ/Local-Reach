@@ -2,7 +2,7 @@
 // LocalReach Frontend Configuration
 // ============================================================
 
-window.SPOTLOCAL_API = "http://localhost:5000/api";
+window.SPOTLOCAL_API = "/api";
 
 
 // ============================================================

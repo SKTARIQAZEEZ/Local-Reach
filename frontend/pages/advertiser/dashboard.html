@@ -829,7 +829,7 @@ async function loadBusiness() {
     try {
 
         const response = await fetch(
-            "http://localhost:5000/api/business",
+            "/api/business",
             {
                 method: "GET",
                 headers: {
@@ -871,7 +871,7 @@ async function loadDashboardStats() {
     if (!token) return;
 
     try {
-        const response = await fetch("http://localhost:5000/api/campaigns", {
+        const response = await fetch("/api/campaigns", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -1011,7 +1011,7 @@ async function loadWeeklyAnalytics() {
 
     try {
         const response = await fetch(
-            "http://localhost:5000/api/campaigns/analytics/weekly",
+            "/api/campaigns/analytics/weekly",
             {
                 method: "GET",
                 headers: {
@@ -1096,7 +1096,7 @@ async function loadNotificationCount() {
 
         const response =
             await fetch(
-                "http://localhost:5000/api/notifications/unread-count",
+                "/api/notifications/unread-count",
                 {
                     method: "GET",
 

@@ -596,7 +596,7 @@
 
                 const response =
                     await fetch(
-                        "http://localhost:5000/api/admin/payouts",
+                        "/api/admin/payouts",
                         {
                             headers: {
                                 "Authorization":
@@ -840,7 +840,7 @@
 
                 const response =
                     await fetch(
-                        `http://localhost:5000/api/admin/payouts/${payoutId}/approve`,
+                        `/api/admin/payouts/${payoutId}/approve`,
                         {
                             method: "PATCH",
 

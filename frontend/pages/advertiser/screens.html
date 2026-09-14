@@ -542,7 +542,7 @@
 
             const response =
                 await fetch(
-                    "http://localhost:5000/api/screens",
+                    "/api/screens",
                     {
                         headers: {
                             "Authorization":
@@ -849,7 +849,7 @@ document.addEventListener("click", async function (event) {
 
         // Load available campaigns
         const campaignResponse = await fetch(
-            "http://localhost:5000/api/campaigns",
+            "/api/campaigns",
             {
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -897,7 +897,7 @@ document.addEventListener("click", async function (event) {
 
         // Get the real UUID of the screen
         const screenResponse = await fetch(
-            "http://localhost:5000/api/screens",
+            "/api/screens",
             {
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -925,7 +925,7 @@ document.addEventListener("click", async function (event) {
 
         // Connect screen to campaign
         const response = await fetch(
-            `http://localhost:5000/api/campaigns/${selectedCampaign.id}/screens`,
+            `/api/campaigns/${selectedCampaign.id}/screens`,
             {
                 method: "POST",
                 headers: {
